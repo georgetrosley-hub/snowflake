@@ -11,22 +11,22 @@ const config: Config = {
     extend: {
       colors: {
         surface: {
-          DEFAULT: "#161412",
-          elevated: "#1e1c19",
+          DEFAULT: "#141210",
+          elevated: "#1d1a17",
           muted: "#282522",
-          border: "#352f2a",
-          divider: "#2c2824",
+          border: "#3a332d",
+          divider: "#2f2a24",
         },
         text: {
-          primary: "#f3f0eb",
-          secondary: "#b8b2a9",
-          muted: "#6e6860",
+          primary: "#f4f1eb",
+          secondary: "#bfb8ae",
+          muted: "#7c756b",
           faint: "#524d47",
         },
         accent: {
-          DEFAULT: "#c4b59a",
-          muted: "#9a8f7a",
-          subtle: "#5c5548",
+          DEFAULT: "#cec0a6",
+          muted: "#ac9e86",
+          subtle: "#645c4f",
         },
       },
       fontFamily: {

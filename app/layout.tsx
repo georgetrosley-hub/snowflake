@@ -13,8 +13,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Claude Enterprise Expansion Engine",
-  description: "Enterprise GTM mission control for Claude",
+  title: "Anthropic | Enterprise Expansion OS",
+  description: "Anthropic-branded enterprise GTM mission control for Claude",
 };
 
 export default function RootLayout({

@@ -1,6 +1,6 @@
-# Claude Enterprise Expansion Engine
+# Anthropic Enterprise Expansion OS
 
-A premium, dark-mode-first web app simulating how multiple Claude agents help an enterprise account executive land and expand Claude inside Fortune 500 companies. Built to feel like a plausible internal Anthropic/Claude prototype for a future enterprise GTM product.
+A premium, Anthropic-branded, dark-mode web app simulating how multiple Claude agents help an enterprise account executive land and expand Claude inside Fortune 500 companies. Built to feel like an internal Anthropic product prototype with production-level design polish.
 
 ## How to run
 

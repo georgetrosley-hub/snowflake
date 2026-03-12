@@ -3,18 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --surface: #161412;
-  --surface-elevated: #1e1c19;
+  --surface: #141210;
+  --surface-elevated: #1d1a17;
   --surface-muted: #282522;
-  --surface-border: #352f2a;
-  --surface-divider: #2c2824;
-  --text-primary: #f3f0eb;
-  --text-secondary: #b8b2a9;
-  --text-muted: #6e6860;
+  --surface-border: #3a332d;
+  --surface-divider: #2f2a24;
+  --text-primary: #f4f1eb;
+  --text-secondary: #bfb8ae;
+  --text-muted: #7c756b;
   --text-faint: #524d47;
-  --accent: #c4b59a;
-  --accent-muted: #9a8f7a;
-  --accent-subtle: #5c5548;
+  --accent: #cec0a6;
+  --accent-muted: #ac9e86;
+  --accent-subtle: #645c4f;
   --warm: #3d3630;
 }
 
@@ -33,6 +33,27 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   letter-spacing: 0.01em;
+  background-image: radial-gradient(circle at 20% -10%, rgba(206, 192, 166, 0.1), transparent 34%);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.03) 0px,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+}
+
+::selection {
+  background: rgba(206, 192, 166, 0.28);
+  color: var(--text-primary);
 }
 
 ::-webkit-scrollbar {

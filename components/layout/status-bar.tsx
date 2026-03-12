@@ -11,7 +11,6 @@ interface StatusBarProps {
   pipelineTarget: number;
   estimatedArr: number;
   dealStage: string;
-  competitivePressure: number;
   activeAgents: number;
   oversightStatus: "active" | "idle";
 }
@@ -27,14 +26,14 @@ export function StatusBar({
   oversightStatus,
 }: StatusBarProps) {
   return (
-    <header className="flex h-11 shrink-0 items-center border-b border-surface-border/60 bg-surface-elevated/40 px-6">
+    <header className="flex h-12 shrink-0 items-center justify-between border-b border-surface-border/70 bg-surface-elevated/55 px-6 backdrop-blur-xl">
       <div className="flex items-center gap-8">
-        <div className="relative">
+        <div className="relative min-w-[220px]">
           <select
             value={account.id}
             onChange={(e) => onAccountChange(e.target.value)}
             className={cn(
-              "appearance-none rounded bg-transparent py-1.5 pr-7 text-[13px] font-medium text-text-primary",
+              "w-full appearance-none rounded bg-transparent py-1.5 pr-7 text-[13px] font-medium text-text-primary",
               "border-none focus:outline-none focus:ring-0"
             )}
           >
@@ -60,15 +59,22 @@ export function StatusBar({
             <span className="text-text-secondary">{activeAgents}</span>
             {" "}agents
           </span>
-          <span
-            className={cn(
-              "text-[11px]",
-              oversightStatus === "active" ? "text-accent-muted" : "text-text-faint"
-            )}
-          >
-            {oversightStatus === "active" ? "Approval required" : "Clear"}
-          </span>
         </div>
+      </div>
+      <div className="flex items-center gap-2 text-[11px]">
+        <span className="rounded-full border border-surface-border/70 bg-surface px-2.5 py-1 text-text-muted">
+          Anthropic Internal
+        </span>
+        <span
+          className={cn(
+            "rounded-full border px-2.5 py-1",
+            oversightStatus === "active"
+              ? "border-accent/35 bg-accent/10 text-accent"
+              : "border-surface-border/70 bg-surface text-text-faint"
+          )}
+        >
+          {oversightStatus === "active" ? "Human approval required" : "All clear"}
+        </span>
       </div>
     </header>
   );

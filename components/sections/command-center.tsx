@@ -48,7 +48,15 @@ export function CommandCenter({
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.6, ease }}
-          className="text-[11px] font-medium uppercase tracking-[0.2em] text-text-muted mb-6"
+          className="text-[11px] font-medium uppercase tracking-[0.2em] text-text-muted mb-3"
+        >
+          Anthropic enterprise motion
+        </motion.p>
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.12, duration: 0.6, ease }}
+          className="text-[11px] uppercase tracking-[0.16em] text-text-faint mb-6"
         >
           Target account
         </motion.p>
