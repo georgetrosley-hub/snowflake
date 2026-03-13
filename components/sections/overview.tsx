@@ -103,8 +103,9 @@ export function Overview({
   );
   const staleItems = executionItems.filter((i) => isStale(i.lastUpdated));
 
+  const MotionRoot = motion.div;
   return (
-    <motion.div
+    <MotionRoot
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.45 }}
@@ -395,6 +396,6 @@ export function Overview({
           ))}
         </div>
       </section>
-    </motion.div>
+    </MotionRoot>
   );
 }
