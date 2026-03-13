@@ -65,7 +65,7 @@ export function ClaudeActionBar({
   };
 
   return (
-    <section className={cn("min-w-0 rounded-[28px] border-2 border-claude-coral/40 bg-claude-coral/[0.08] p-4 sm:p-6", className)}>
+    <section className={cn("min-w-0 rounded-[28px] border-2 border-claude-coral/40 bg-white/[0.02] p-4 sm:p-6", className)}>
       <div className="flex items-start gap-3">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-claude-coral/[0.12]">
           <ClaudeSparkle size={14} className="text-claude-coral" />
