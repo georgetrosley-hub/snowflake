@@ -6,7 +6,7 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { ClaudeActionBar } from "@/components/ui/claude-action-bar";
 import { getFlagshipDealContext } from "@/data/flagship-deals";
 import { useToast } from "@/app/context/toast-context";
-import { getPlansForThisWeek } from "@/lib/plans-for-week";
+import { getPlansForThisWeek, getPlansForThisWeekShort } from "@/lib/plans-for-week";
 import type { Account, AccountUpdate, Competitor, ExecutionItem, WorkspaceDraft } from "@/types";
 
 interface DealProgressionProps {
@@ -36,6 +36,7 @@ export function DealProgression({
   const { showToast } = useToast();
   const flagshipDeal = getFlagshipDealContext(account.id);
   const plansForThisWeek = getPlansForThisWeek(accountUpdates, executionItems);
+  const plansForThisWeekShort = getPlansForThisWeekShort(accountUpdates, executionItems);
 
   const handleWorkspaceFieldChange = useCallback(
     (field: keyof WorkspaceDraft, value: string) => {
@@ -62,7 +63,7 @@ export function DealProgression({
             title="Deal progress"
             subtitle={`Named champion, pilot criteria, and competitive battle for ${account.name}.`}
           />
-          <div className="mt-6 grid gap-6 xl:grid-cols-3">
+          <div className="mt-6 grid grid-cols-1 gap-6 xl:grid-cols-3">
             <div className="xl:col-span-2 space-y-6">
               <div className="rounded-[22px] border border-claude-coral/20 bg-white/[0.02] px-4 py-4">
                 <p className="text-[10px] uppercase tracking-[0.12em] text-text-faint">Champion</p>
@@ -131,8 +132,8 @@ export function DealProgression({
         </section>
       )}
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-        <section className="rounded-[28px] border border-white/8 bg-white/[0.03] p-5 sm:p-6">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+        <section className="min-w-0 rounded-[28px] border border-white/8 bg-white/[0.03] p-4 sm:p-6">
           <SectionHeader
             title="AE control board"
             subtitle="This is the editable layer: the account thesis, the win theme, the weekly focus, and the notes the rep actually lives in."
@@ -168,12 +169,18 @@ export function DealProgression({
               <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.12em] text-text-faint">
                 Plans for this week
               </label>
-              <p className="rounded-[22px] border border-claude-coral/20 bg-white/[0.02] px-4 py-3 text-[13px] leading-relaxed text-text-secondary whitespace-pre-wrap">
-                {plansForThisWeek}
-              </p>
-              <p className="mt-1.5 text-[11px] text-text-faint">
-                Generated from last week&apos;s notes and where things need to progress.
-              </p>
+              <button
+                type="button"
+                onClick={() => document.getElementById("plans-for-this-week-detail")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+                className="w-full rounded-[22px] border border-claude-coral/25 bg-surface-muted/20 px-4 py-3 text-left transition-colors hover:border-claude-coral/40 hover:bg-surface-muted/30 active:bg-surface-muted/40"
+              >
+                <p className="whitespace-pre-wrap text-[13px] leading-relaxed text-text-secondary">
+                  {plansForThisWeekShort}
+                </p>
+                <p className="mt-1.5 text-[11px] text-text-faint">
+                  Tap for full detail ↓
+                </p>
+              </button>
             </div>
 
             <div>
@@ -194,7 +201,7 @@ export function DealProgression({
                     if (saveToastRef.current) clearTimeout(saveToastRef.current);
                     showToast("Saved");
                   }}
-                  className="rounded-xl border border-surface-border/60 bg-white/80 px-4 py-2 text-[13px] font-medium text-text-primary shadow-sm transition hover:border-claude-coral/30 hover:bg-white"
+                  className="touch-target min-h-[44px] rounded-xl border border-surface-border/60 bg-white/80 px-4 py-2.5 text-[13px] font-medium text-text-primary shadow-sm transition active:bg-white hover:border-claude-coral/30 hover:bg-white"
                 >
                   Save
                 </button>
@@ -206,7 +213,7 @@ export function DealProgression({
                     onAddAccountUpdate(title, note, "internal");
                     showToast("Added to account log");
                   }}
-                  className="rounded-xl border border-claude-coral/30 bg-claude-coral/10 px-4 py-2 text-[13px] font-medium text-claude-coral transition hover:border-claude-coral/50 hover:bg-claude-coral/15"
+                  className="touch-target min-h-[44px] rounded-xl border border-claude-coral/30 bg-claude-coral/10 px-4 py-2.5 text-[13px] font-medium text-claude-coral transition active:bg-claude-coral/15 hover:border-claude-coral/50 hover:bg-claude-coral/15"
                 >
                   Add to notes
                 </button>
@@ -244,6 +251,18 @@ export function DealProgression({
           ]}
         />
       </div>
+
+      <section id="plans-for-this-week-detail" className="scroll-mt-6 space-y-4">
+        <SectionHeader
+          title="Plans for this week · full detail"
+          subtitle="Generated from last week's notes and where things need to progress."
+        />
+        <div className="rounded-2xl border border-claude-coral/20 bg-surface-muted/50 p-4 sm:p-6">
+          <p className="whitespace-pre-wrap text-[13px] leading-relaxed text-text-secondary">
+            {plansForThisWeek}
+          </p>
+        </div>
+      </section>
     </motion.div>
   );
 }

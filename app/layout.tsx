@@ -1,9 +1,15 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ApiKeyProvider } from "@/app/context/api-key-context";
 import { ThemeProvider } from "@/app/context/theme-context";
 import { ToastProvider } from "@/app/context/toast-context";
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 const inter = Inter({
   variable: "--font-geist-sans",

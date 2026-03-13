@@ -40,8 +40,8 @@ export function AccountLog({
       transition={{ duration: 0.45 }}
       className="space-y-10 sm:space-y-12"
     >
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
-        <section className="space-y-4 p-0">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+        <section className="min-w-0 space-y-4 p-0">
           <SectionHeader
             title="Account log"
             subtitle="The place the AE tracks what happened, what changed, what slipped, and what to do next."
@@ -77,7 +77,7 @@ export function AccountLog({
           </div>
         </section>
 
-        <section className="rounded-[28px] border border-white/8 bg-white/[0.03] p-5 sm:p-6">
+        <section className="min-w-0 rounded-[28px] border border-white/8 bg-white/[0.03] p-4 sm:p-6">
           <SectionHeader
             title="Update the account"
             subtitle="Drop in a real note the way a top AE would after a call, internal review, or competitive development."
@@ -104,10 +104,10 @@ export function AccountLog({
                     key={tag}
                     type="button"
                     onClick={() => setUpdateTag(tag)}
-                    className={`rounded-full border px-3 py-1.5 text-[12px] transition-colors ${
+                    className={`touch-target min-h-[44px] rounded-full border px-4 py-2.5 text-[12px] transition-colors ${
                       updateTag === tag
                         ? "border-claude-coral/20 bg-claude-coral/[0.10] text-claude-coral"
-                        : "border-white/10 bg-white/[0.04] text-text-secondary hover:bg-white/[0.06]"
+                        : "border-white/10 bg-white/[0.04] text-text-secondary hover:bg-white/[0.06] active:bg-white/[0.06]"
                     }`}
                   >
                     {tag.replace("_", " ")}
@@ -131,7 +131,7 @@ export function AccountLog({
               type="button"
               onClick={handleAddUpdate}
               disabled={!updateTitle.trim() || !updateNote.trim()}
-              className="w-fit rounded-full border border-claude-coral/20 bg-claude-coral/[0.10] px-4 py-2 text-[13px] font-medium text-claude-coral disabled:opacity-50"
+              className="touch-target w-full min-h-[44px] rounded-full border border-claude-coral/20 bg-claude-coral/[0.10] px-4 py-3 text-[13px] font-medium text-claude-coral disabled:opacity-50 sm:w-fit sm:py-2"
             >
               Add account update
             </button>

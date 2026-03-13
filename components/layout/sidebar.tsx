@@ -129,8 +129,8 @@ function SidebarBody({
             onCloseMobile?.();
           }}
           className={cn(
-            "flex w-full items-center gap-2 rounded-lg border border-claude-coral/20 bg-claude-coral/[0.06] px-3 py-2 text-[12px] font-medium text-claude-coral/90 transition-colors hover:bg-claude-coral/10",
-            compact && "justify-center px-0"
+            "flex min-h-[44px] w-full items-center justify-center gap-2 rounded-lg border border-claude-coral/20 bg-claude-coral/[0.06] px-3 py-3 text-[12px] font-medium text-claude-coral/90 transition-colors active:bg-claude-coral/10 hover:bg-claude-coral/10",
+            compact && "justify-center px-0 py-2 min-h-[40px]"
           )}
           aria-label="Ask Claude"
           title="Ask Claude"
@@ -157,8 +157,8 @@ function SidebarBody({
                     type="button"
                     onClick={() => handleSectionSelect(id)}
                     className={cn(
-                      "group flex w-full items-center gap-2 rounded-md px-2.5 py-[7px] text-left text-[13px] transition-all duration-150",
-                      compact && "justify-center px-0",
+                      "group flex w-full min-h-[44px] items-center gap-2 rounded-md px-3 py-3 text-left text-[13px] transition-all duration-150 active:bg-surface-muted/40",
+                      compact && "justify-center px-0 py-2 min-h-[40px]",
                       isActive
                         ? "bg-surface-muted/50 text-text-primary"
                         : "text-text-muted hover:bg-surface-muted/30 hover:text-text-secondary"

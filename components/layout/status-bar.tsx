@@ -62,14 +62,14 @@ export function StatusBar({
 
   return (
     <>
-      <header className="shrink-0 border-b border-surface-border/35 bg-surface/40 px-4 py-3 sm:px-6">
+      <header className="shrink-0 border-b border-surface-border/35 bg-surface/40 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6">
         <div className="flex flex-col gap-3">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
               <button
                 type="button"
                 onClick={onOpenMobileNav}
-                className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-surface-border/50 bg-surface-elevated/35 text-text-secondary transition-colors hover:bg-surface-muted/30 hover:text-text-primary lg:hidden"
+                className="touch-target inline-flex h-10 w-10 min-h-[44px] min-w-[44px] items-center justify-center rounded-md border border-surface-border/50 bg-surface-elevated/35 text-text-secondary transition-colors active:bg-surface-muted/30 hover:bg-surface-muted/30 hover:text-text-primary lg:hidden"
                 aria-label="Open navigation"
               >
                 <Menu className="h-4 w-4" />

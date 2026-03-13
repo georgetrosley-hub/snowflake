@@ -92,7 +92,7 @@ export function Stakeholders({
         ]}
       />
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <div className="rounded-[24px] border border-claude-coral/20 bg-white/[0.02] p-4">
           <div className="flex items-center gap-2 text-text-secondary">
             <Users className="h-4 w-4 text-claude-coral/75" strokeWidth={1.8} />
@@ -139,7 +139,7 @@ export function Stakeholders({
         </div>
       </div>
 
-      <div className="grid gap-4 xl:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
         {stakeholders.map((stakeholder, index) => (
           <motion.article
             key={stakeholder.id}

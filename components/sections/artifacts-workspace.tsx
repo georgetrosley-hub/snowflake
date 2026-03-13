@@ -191,7 +191,7 @@ export function ArtifactsWorkspace({
         subtitle="The actual outputs I would use to move a deal forward: exec briefs, meeting prep, follow-up emails, objection handling, security answers, and battle cards."
       />
 
-      <div className="grid gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
         <aside className="space-y-3">
           {artifactTemplates.map(({ id, label, description, icon: Icon }) => (
             <button

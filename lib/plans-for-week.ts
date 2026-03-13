@@ -1,8 +1,7 @@
 import type { AccountUpdate, ExecutionItem } from "@/types";
 
 /**
- * Builds an automated "Plans for this week" string from last week's notes,
- * recent account updates, and where execution items need to progress.
+ * Full "Plans for this week" from last week's notes and execution progress.
  */
 export function getPlansForThisWeek(
   accountUpdates: AccountUpdate[],
@@ -37,4 +36,33 @@ export function getPlansForThisWeek(
   }
 
   return lines.join("\n");
+}
+
+/**
+ * Short 2–3 bullet summary for the Plans battle card.
+ */
+export function getPlansForThisWeekShort(
+  accountUpdates: AccountUpdate[],
+  executionItems: ExecutionItem[]
+): string {
+  const toAdvance = executionItems.filter(
+    (i) => i.status === "in_progress" || i.status === "ready" || i.status === "blocked"
+  );
+  const bullets: string[] = [];
+
+  if (accountUpdates.length > 0) {
+    const latest = accountUpdates[0];
+    bullets.push(`Follow up on: ${latest.title}`);
+  }
+  if (toAdvance.length > 0) {
+    toAdvance.slice(0, 2).forEach((i) => {
+      bullets.push(`${i.title} · ${i.owner}`);
+    });
+  }
+
+  if (bullets.length === 0) {
+    return "• Add an account update or move items in the Deal Plan to see plans here.";
+  }
+
+  return bullets.map((b) => `• ${b}`).join("\n");
 }

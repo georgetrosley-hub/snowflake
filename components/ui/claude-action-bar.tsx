@@ -65,12 +65,12 @@ export function ClaudeActionBar({
   };
 
   return (
-    <section className={cn("rounded-[28px] border-2 border-claude-coral/40 bg-claude-coral/[0.08] p-5 sm:p-6", className)}>
+    <section className={cn("min-w-0 rounded-[28px] border-2 border-claude-coral/40 bg-claude-coral/[0.08] p-4 sm:p-6", className)}>
       <div className="flex items-start gap-3">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-2xl bg-claude-coral/[0.12]">
           <ClaudeSparkle size={14} className="text-claude-coral" />
         </div>
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p className="text-[13px] font-medium text-text-primary">{title}</p>
           {subtitle && (
             <p className="mt-1 max-w-2xl text-[12px] leading-relaxed text-text-muted">
@@ -80,14 +80,14 @@ export function ClaudeActionBar({
         </div>
       </div>
 
-      <div className="mt-5 flex flex-wrap gap-2">
+      <div className="mt-4 flex flex-wrap gap-2 sm:mt-5">
         {actions.map((action) => (
           <button
             key={action.id}
             type="button"
             onClick={() => runAction(action)}
             className={cn(
-              "rounded-lg border-2 px-4 py-2.5 text-[13px] font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-claude-coral/40 focus-visible:ring-offset-2",
+              "touch-target min-h-[44px] rounded-lg border-2 px-4 py-2.5 text-[13px] font-medium transition-colors outline-none focus-visible:ring-2 focus-visible:ring-claude-coral/40 focus-visible:ring-offset-2 active:scale-[0.98]",
               activeActionId === action.id
                 ? "border-claude-coral bg-claude-coral/[0.12] text-claude-coral shadow-sm"
                 : "border-surface-border bg-surface-muted/40 text-text-primary hover:border-claude-coral/50 hover:bg-claude-coral/[0.06] hover:text-claude-coral/90"
@@ -98,7 +98,7 @@ export function ClaudeActionBar({
         ))}
       </div>
 
-      <div className="mt-5">
+      <div className="mt-4 sm:mt-5">
         <label className="mb-2 block text-[11px] font-medium uppercase tracking-[0.12em] text-text-faint/80">
           Or ask Claude something else
         </label>
@@ -108,13 +108,13 @@ export function ClaudeActionBar({
             onChange={(event) => setCustomText(event.target.value)}
             rows={4}
             placeholder="e.g. Pressure-test this update, write follow-up messaging, or ask for a different angle on the deal..."
-            className="w-full resize-none rounded-[22px] border-0 bg-transparent px-4 pt-4 pb-12 pr-28 text-[13px] leading-relaxed text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-0"
+            className="w-full resize-none rounded-[22px] border-0 bg-transparent px-4 pt-4 pb-12 pr-24 text-[13px] leading-relaxed text-text-primary placeholder:text-text-muted/60 focus:outline-none focus:ring-0 sm:pr-28"
           />
           <button
             type="button"
             onClick={runCustom}
             disabled={!customText.trim()}
-            className="absolute bottom-3 right-3 flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-medium text-claude-coral transition-colors hover:bg-claude-coral/10 disabled:pointer-events-none disabled:opacity-40"
+            className="touch-target absolute bottom-3 right-3 flex min-h-[40px] min-w-[44px] items-center justify-center rounded-lg px-3 py-2 text-[12px] font-medium text-claude-coral transition-colors active:bg-claude-coral/15 hover:bg-claude-coral/10 disabled:pointer-events-none disabled:opacity-40"
           >
             Ask Claude
           </button>

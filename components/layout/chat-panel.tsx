@@ -173,7 +173,7 @@ export function ChatPanel({
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
-            className="fixed inset-y-0 right-0 z-50 flex h-[100dvh] w-full flex-col bg-surface shadow-2xl sm:max-w-[480px] sm:border-l sm:border-surface-border/40"
+            className="fixed inset-y-0 right-0 z-50 flex h-[100dvh] max-h-[100dvh] w-full flex-col overflow-hidden bg-surface shadow-2xl sm:max-w-[480px] sm:border-l sm:border-surface-border/40 pt-[env(safe-area-inset-top)] pb-[env(safe-area-inset-bottom)]"
           >
             {/* Header */}
             <div className="flex min-h-12 shrink-0 items-center justify-between border-b border-surface-border/40 px-4 py-3">

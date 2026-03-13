@@ -9,7 +9,7 @@ import { MetricCard } from "@/components/ui/metric-card";
 import { ClaudeSparkle } from "@/components/ui/claude-logo";
 import { useToast } from "@/app/context/toast-context";
 import { isStale } from "@/lib/deal-health";
-import { getPlansForThisWeek } from "@/lib/plans-for-week";
+import { getPlansForThisWeek, getPlansForThisWeekShort } from "@/lib/plans-for-week";
 import type {
   Account,
   AccountSignal,
@@ -92,6 +92,10 @@ export function Overview({
     () => getPlansForThisWeek(accountUpdates, executionItems),
     [accountUpdates, executionItems]
   );
+  const plansForThisWeekShort = useMemo(
+    () => getPlansForThisWeekShort(accountUpdates, executionItems),
+    [accountUpdates, executionItems]
+  );
 
   const blockedItems = executionItems.filter((i) => i.status === "blocked");
   const needsAttention = executionItems.filter(
@@ -107,7 +111,7 @@ export function Overview({
       className="space-y-10 sm:space-y-12"
     >
       {/* VP oversight — 30-second scan for Ryan */}
-      <section className="rounded-2xl border border-claude-coral/20 bg-white/[0.02] p-5 sm:p-6">
+      <section className="rounded-2xl border border-claude-coral/20 bg-white/[0.02] p-4 sm:p-6">
         <div className="flex items-center gap-2">
           <Eye className="h-4 w-4 text-text-faint" strokeWidth={1.8} />
           <p className="text-[11px] font-medium uppercase tracking-wider text-text-faint">
@@ -156,7 +160,7 @@ export function Overview({
       </section>
 
       {/* Today's workspace — compact status strip */}
-      <section className="rounded-2xl border border-surface-border bg-surface-elevated p-5 sm:p-6 shadow-elevated">
+      <section className="rounded-2xl border border-surface-border bg-surface-elevated p-4 sm:p-6 shadow-elevated">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="text-[11px] font-medium uppercase tracking-wider text-text-muted">
@@ -168,26 +172,30 @@ export function Overview({
           </div>
         </div>
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-3">
-          <div className="flex flex-col rounded-xl border border-claude-coral/20 bg-surface-muted/50 px-4 py-3.5">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <button
+            type="button"
+            onClick={() => document.getElementById("plans-for-this-week-detail")?.scrollIntoView({ behavior: "smooth", block: "start" })}
+            className="flex min-h-[88px] touch-target flex-col justify-start rounded-xl border border-claude-coral/25 bg-surface-muted/50 px-4 py-3.5 text-left transition-colors active:bg-surface-muted/70 hover:bg-surface-muted/70 hover:border-claude-coral/40 sm:min-h-0"
+          >
             <div className="flex items-center gap-2">
-              <Zap className="h-4 w-4 text-claude-coral" strokeWidth={2} />
+              <Zap className="h-4 w-4 shrink-0 text-claude-coral" strokeWidth={2} />
               <p className="text-[11px] font-bold uppercase tracking-wider text-claude-coral">Plans for this week</p>
             </div>
             <p className="mt-2.5 whitespace-pre-wrap text-[13px] leading-relaxed text-text-secondary">
-              {plansForThisWeek}
+              {plansForThisWeekShort}
             </p>
             <p className="mt-1.5 text-[11px] text-text-faint">
-              From last week&apos;s notes and progress
+              Tap for full detail ↓
             </p>
-          </div>
+          </button>
           <button
             type="button"
             onClick={() => onSectionChange?.("accountLog")}
-            className="flex flex-col justify-center rounded-xl border border-claude-coral/25 bg-surface-muted/50 px-4 py-3.5 text-left transition-colors hover:bg-surface-muted/70 hover:border-claude-coral/40"
+            className="flex min-h-[88px] touch-target flex-col justify-center rounded-xl border border-claude-coral/25 bg-surface-muted/50 px-4 py-4 text-left transition-colors active:bg-surface-muted/70 hover:bg-surface-muted/70 hover:border-claude-coral/40 sm:min-h-0 sm:py-3.5"
           >
             <div className="flex items-center gap-2">
-              <ArrowRight className="h-4 w-4 text-claude-coral" strokeWidth={2} />
+              <ArrowRight className="h-4 w-4 shrink-0 text-claude-coral" strokeWidth={2} />
               <p className="text-[11px] font-bold uppercase tracking-wider text-claude-coral">Where I left off</p>
             </div>
             <p className="mt-2 text-[15px] font-bold text-text-primary">
@@ -198,10 +206,10 @@ export function Overview({
           <button
             type="button"
             onClick={() => onSectionChange?.("first30Days")}
-            className="flex flex-col justify-center rounded-xl border border-claude-coral/25 bg-surface-muted/50 px-4 py-3.5 text-left transition-colors hover:bg-surface-muted/70 hover:border-claude-coral/40"
+            className="flex min-h-[88px] touch-target flex-col justify-center rounded-xl border border-claude-coral/25 bg-surface-muted/50 px-4 py-4 text-left transition-colors active:bg-surface-muted/70 hover:bg-surface-muted/70 hover:border-claude-coral/40 sm:min-h-0 sm:py-3.5"
           >
             <div className="flex items-center gap-2">
-              <Target className="h-4 w-4 text-claude-coral" strokeWidth={2} />
+              <Target className="h-4 w-4 shrink-0 text-claude-coral" strokeWidth={2} />
               <p className="text-[11px] font-bold uppercase tracking-wider text-claude-coral">Today&apos;s priority</p>
             </div>
             <p className="mt-2 text-[15px] font-bold text-text-primary">
@@ -228,7 +236,7 @@ export function Overview({
         </div>
       </section>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard
           label="Modeled pipeline"
           value={`$${pipelineTarget.toFixed(2)}M`}
@@ -251,13 +259,13 @@ export function Overview({
         />
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1.4fr)_380px]">
-        <section className="rounded-[28px] border border-claude-coral/20 bg-white/[0.02] p-5 sm:p-6">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.4fr)_380px]">
+        <section className="min-w-0 rounded-[28px] border border-claude-coral/20 bg-white/[0.02] p-4 sm:p-6">
           <SectionHeader
             title="How I&apos;d run this account"
             subtitle="The capture-plan view: how I&apos;d create urgency, who I&apos;d build with, what pilot I&apos;d land, and how I&apos;d expand."
           />
-          <div className="grid gap-6 xl:grid-cols-2">
+          <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
             <div>
               <p className="text-[10px] uppercase tracking-[0.12em] text-text-faint">Land motion</p>
               <p className="mt-3 text-[15px] font-medium text-text-primary">{account.firstWedge}</p>
@@ -299,8 +307,8 @@ export function Overview({
           </div>
         </section>
 
-        <aside className="space-y-4">
-          <div className="rounded-[28px] border border-claude-coral/15 bg-claude-coral/[0.05] p-5 sm:p-6">
+        <aside className="min-w-0 space-y-4">
+          <div className="rounded-[28px] border border-claude-coral/15 bg-claude-coral/[0.05] p-4 sm:p-6">
             <div className="flex items-center gap-2">
               <ClaudeSparkle size={14} className="text-claude-coral" />
               <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-claude-coral/70">
@@ -312,7 +320,7 @@ export function Overview({
             </p>
           </div>
 
-          <div className="rounded-[28px] border border-claude-coral/20 bg-white/[0.02] p-5">
+          <div className="rounded-[28px] border border-claude-coral/20 bg-white/[0.02] p-4 sm:p-5">
             <div className="flex items-center gap-2 text-text-secondary">
               <Crosshair className="h-4 w-4 text-claude-coral/75" strokeWidth={1.8} />
               <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-text-faint">
@@ -334,6 +342,23 @@ export function Overview({
           </div>
         </aside>
       </div>
+
+      <section id="plans-for-this-week-detail" className="scroll-mt-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <Zap className="h-4 w-4 text-claude-coral/75" strokeWidth={2} />
+          <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-text-faint">
+            Plans for this week · full detail
+          </p>
+        </div>
+        <div className="rounded-2xl border border-claude-coral/20 bg-surface-muted/50 p-4 sm:p-6">
+          <p className="whitespace-pre-wrap text-[13px] leading-relaxed text-text-secondary">
+            {plansForThisWeek}
+          </p>
+          <p className="mt-3 text-[11px] text-text-faint">
+            From last week&apos;s notes and where things need to progress.
+          </p>
+        </div>
+      </section>
 
       <section className="space-y-4">
         <SectionHeader

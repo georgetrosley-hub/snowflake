@@ -146,7 +146,7 @@ export function Signals({
               </div>
             </div>
 
-            <div className="mt-4 grid gap-4 xl:grid-cols-[minmax(0,1.2fr)_320px]">
+            <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.2fr)_320px]">
               <div>
                 <p className="text-[13px] leading-relaxed text-text-secondary">
                   {signal.summary}
