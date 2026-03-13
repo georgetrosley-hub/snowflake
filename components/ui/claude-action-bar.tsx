@@ -98,27 +98,26 @@ export function ClaudeActionBar({
         ))}
       </div>
 
-      <div className="mt-4 grid gap-3 sm:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-        <div className="space-y-2">
-          <label className="block text-[11px] font-medium uppercase tracking-[0.12em] text-text-faint/80">
-            Or ask Claude something else
-          </label>
-          <div className="flex flex-col gap-2 sm:flex-row">
-            <textarea
-              value={customText}
-              onChange={(event) => setCustomText(event.target.value)}
-              rows={2}
-              placeholder="e.g. Pressure-test this update, write follow-up messaging, or ask for a different angle on the deal..."
-              className="w-full resize-none rounded-[18px] border border-surface-border/40 bg-surface px-3 py-2 text-[13px] leading-relaxed text-text-primary placeholder:text-text-muted/60 focus:border-claude-coral/40 focus:outline-none"
-            />
-            <button
-              type="button"
-              onClick={runCustom}
-              className="shrink-0 rounded-[999px] border border-claude-coral/30 bg-claude-coral/90 px-4 py-2 text-[13px] font-medium text-white shadow-sm transition hover:bg-claude-coral"
-            >
-              Ask Claude
-            </button>
-          </div>
+      <div className="mt-5 space-y-2">
+        <label className="block text-[11px] font-medium uppercase tracking-[0.12em] text-text-faint/80">
+          Or ask Claude something else
+        </label>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+          <textarea
+            value={customText}
+            onChange={(event) => setCustomText(event.target.value)}
+            rows={5}
+            placeholder="e.g. Pressure-test this update, write follow-up messaging, or ask for a different angle on the deal..."
+            className="min-h-[120px] w-full resize-y rounded-[18px] border border-surface-border/40 bg-surface px-4 py-3 text-[13px] leading-relaxed text-text-primary placeholder:text-text-muted/60 focus:border-claude-coral/40 focus:outline-none sm:min-h-[100px]"
+          />
+          <button
+            type="button"
+            onClick={runCustom}
+            disabled={!customText.trim()}
+            className="shrink-0 self-end rounded-lg border border-claude-coral/25 bg-transparent px-3 py-2 text-[12px] font-medium text-claude-coral transition hover:bg-claude-coral/10 hover:border-claude-coral/40 disabled:opacity-40 disabled:hover:bg-transparent sm:self-auto"
+          >
+            Ask Claude
+          </button>
         </div>
       </div>
 
