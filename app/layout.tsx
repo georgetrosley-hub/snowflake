@@ -39,14 +39,17 @@ export default function RootLayout({
   const themeScript = `
     (() => {
       try {
-        document.documentElement.dataset.theme = "light";
-        document.documentElement.classList.remove("dark");
+        var s = localStorage.getItem("openai-gtm-theme");
+        var theme = (s === "light" || s === "dark") ? s : "dark";
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.classList.toggle("dark", theme === "dark");
+        document.documentElement.classList.toggle("light", theme === "light");
       } catch {}
     })();
   `;
 
   return (
-    <html lang="en" data-theme="light" suppressHydrationWarning>
+    <html lang="en" data-theme="dark" suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>

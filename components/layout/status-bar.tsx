@@ -6,12 +6,15 @@ import {
   KeyRound,
   Menu,
   MessageCircle,
+  Moon,
   PanelLeftClose,
   PanelLeftOpen,
+  Sun,
   Trash2,
   X,
 } from "lucide-react";
 import { useApiKey } from "@/app/context/api-key-context";
+import { useTheme } from "@/app/context/theme-context";
 import { cn } from "@/lib/utils";
 import { OpenAILogo } from "@/components/ui/openai-logo";
 import type { Account } from "@/types";
@@ -51,6 +54,7 @@ export function StatusBar({
   onToggleSidebar,
 }: StatusBarProps) {
   const { apiKey, hasApiKey, isReady, setApiKey, clearApiKey } = useApiKey();
+  const { theme, toggleTheme } = useTheme();
   const [isApiKeyOpen, setIsApiKeyOpen] = useState(false);
   const [draftApiKey, setDraftApiKey] = useState("");
 
@@ -108,6 +112,19 @@ export function StatusBar({
             </div>
 
             <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="flex h-9 w-9 items-center justify-center rounded-md border border-surface-border/50 bg-surface-elevated/35 text-text-muted transition-colors hover:bg-surface-muted/30 hover:text-text-primary"
+                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+                title={theme === "dark" ? "Light mode" : "Dark mode"}
+              >
+                {theme === "dark" ? (
+                  <Sun className="h-4 w-4" />
+                ) : (
+                  <Moon className="h-4 w-4" />
+                )}
+              </button>
               <button
                 type="button"
                 onClick={() => setIsApiKeyOpen(true)}

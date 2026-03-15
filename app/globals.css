@@ -3,22 +3,24 @@
 @tailwind utilities;
 
 /* OpenAI / ChatGPT design system */
-:root {
-  --surface: 17 17 16;
-  --surface-elevated: 27 26 25;
-  --surface-muted: 37 35 33;
-  --surface-border: 48 45 42;
-  --surface-divider: 39 37 35;
-  --text-primary: 248 245 240;
-  --text-secondary: 214 207 199;
-  --text-muted: 157 146 137;
-  --text-faint: 120 111 103;
-  /* OpenAI green #10a37f */
+
+/* Dark theme (default) — ChatGPT.com-style black */
+:root,
+html[data-theme="dark"] {
+  --surface: 13 13 13;
+  --surface-elevated: 23 23 23;
+  --surface-muted: 32 32 32;
+  --surface-border: 42 42 42;
+  --surface-divider: 38 38 38;
+  --text-primary: 236 236 236;
+  --text-secondary: 200 200 200;
+  --text-muted: 142 142 142;
+  --text-faint: 115 115 115;
   --accent: 16 163 127;
   --accent-muted: 45 179 150;
   --accent-subtle: 20 40 36;
   --openai-green: 16 163 127;
-  --warm: 59 52 48;
+  --warm: 38 38 38;
 }
 
 html[data-theme="light"] {
@@ -45,6 +47,12 @@ html {
 
 html[data-theme="light"] {
   color-scheme: light;
+}
+
+/* Ensure dark theme uses black background */
+html[data-theme="dark"] body,
+html:not([data-theme="light"]) body {
+  background-color: rgb(var(--surface));
 }
 
 body {
