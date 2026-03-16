@@ -31,7 +31,7 @@ export function PipelineDashboard() {
     >
       <SectionHeader
         title="Territory pipeline"
-        subtitle="Pipeline by account and stage. Add accounts in data/pipeline.ts and data/accounts.ts once you receive the 15 from the previous rep."
+        subtitle="Net-new logos and expansion within existing customers. Add accounts in data/pipeline.ts and data/accounts.ts once you receive the 15 from the previous rep."
       />
 
       <div className="rounded-[22px] border border-accent/20 bg-white/[0.02] overflow-hidden">

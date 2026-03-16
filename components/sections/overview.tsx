@@ -128,7 +128,7 @@ export function Overview({
           </div>
         </div>
         <p className="mt-4 text-[12px] text-text-secondary">
-          Use this view to run the account: pipeline, stakeholders, deal plan, and field kit. Select an account in the header to switch. TAM and metrics update per account.
+          This territory is built on existing customers. Use this view to land net-new logos and aggressively expand consumption and use cases within each account — pipeline, stakeholders, deal plan, and field kit. Select an account in the header to switch.
         </p>
       </div>
 

@@ -221,7 +221,7 @@ function SidebarBody({
           {!compact && (
             <div className="min-w-0">
               <p className="truncate text-[12px] font-medium text-text-secondary">Internal AE</p>
-              <p className="text-[10px] text-text-faint">AI Data Cloud</p>
+              <p className="text-[10px] text-text-faint">Net-new + expansion</p>
             </div>
           )}
         </div>

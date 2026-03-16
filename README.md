@@ -1,6 +1,6 @@
 # Snowflake GTM Command Center
 
-Internal GTM hub for Snowflake Account Executives. This project provides a single place for platform narrative, deal playbooks, field kit, and war room tools — designed to feel at home on **snowflake.com** for every internal GTM AE.
+Internal GTM hub for Snowflake Account Executives. This territory is heavy on **existing customers** — the job is to **land net-new logos** and **aggressively expand consumption and use cases** for Snowflake within these accounts. This project provides a single place for platform narrative, deal playbooks, field kit, and war room tools.
 
 ## What’s inside
 

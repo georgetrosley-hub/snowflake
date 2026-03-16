@@ -21,7 +21,7 @@ export function TerritoryEngine({ account, competitors }: TerritoryEngineProps) 
     >
       <SectionHeader
         title="Territory engine"
-        subtitle="Use these actions to generate pipeline and move deals for this account."
+        subtitle="Land net-new logos and expand consumption and use cases within existing customers. Generate pipeline and move deals for this account."
       />
 
       <div className="flex items-center gap-2 rounded-lg border border-emerald-400/20 bg-emerald-400/[0.05] px-4 py-3">
@@ -33,7 +33,7 @@ export function TerritoryEngine({ account, competitors }: TerritoryEngineProps) 
 
       <ClaudeActionBar
         title="Territory engine"
-        subtitle="Generate pipeline, champion maps, outreach, objection prep, and pilot designs for your selected account."
+        subtitle="Generate pipeline, expansion plays, champion maps, outreach, and pilot designs for net-new and expansion within your selected account."
         account={account}
         competitors={competitors}
         actions={[

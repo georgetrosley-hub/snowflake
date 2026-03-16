@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: "GTM Command Center | Snowflake — Internal AE Hub",
   description:
-    "Internal GTM command center for Snowflake Account Executives. Platform narrative, strategic timeline, deal playbooks, and field kit for the AI Data Cloud.",
+    "Internal GTM command center for Snowflake AEs. Territory of existing customers — land net-new logos and aggressively expand consumption and use cases. Platform narrative, deal playbooks, and field kit for the AI Data Cloud.",
   icons: {
     icon: [{ url: "/snowflake-logo.png", type: "image/png", sizes: "any" }],
     apple: [{ url: "/snowflake-logo.png", type: "image/png", sizes: "180x180" }],
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "GTM Command Center | Snowflake",
     description:
-      "Internal GTM hub for Snowflake AEs — AI Data Cloud platform story, deal execution, and field kit.",
+      "Internal GTM hub for Snowflake AEs — existing customers, net-new logos, and expansion. AI Data Cloud platform story, deal execution, and field kit.",
     url: "/",
     siteName: "Snowflake GTM",
     type: "website",
