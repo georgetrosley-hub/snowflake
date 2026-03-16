@@ -6,7 +6,7 @@ import { X, Send, Square, Trash2 } from "lucide-react";
 import { useApiKey } from "@/app/context/api-key-context";
 import { cn } from "@/lib/utils";
 import { readApiErrorMessage } from "@/lib/client/api";
-import { OpenAILogo } from "@/components/ui/openai-logo";
+import { OpenAILogoImage } from "@/components/ui/openai-logo";
 import type { Account, Competitor } from "@/types";
 
 interface Message {
@@ -178,7 +178,7 @@ export function ChatPanel({
             {/* Header */}
             <div className="flex min-h-12 shrink-0 items-center justify-between border-b border-surface-border/40 px-4 py-3">
               <div className="flex min-w-0 items-center gap-2">
-                <OpenAILogo size={14} className="text-accent" />
+                <OpenAILogoImage size={20} />
                 <span className="truncate text-[13px] font-medium text-text-primary">
                   ChatGPT
                 </span>
@@ -214,9 +214,9 @@ export function ChatPanel({
             >
               {messages.length === 0 && !streamingContent && (
                 <div className="flex h-full flex-col items-center justify-center px-4 text-center sm:px-8">
-                  <OpenAILogo
-                    size={28}
-                    className="text-accent/40 mb-4"
+                  <OpenAILogoImage
+                    size={32}
+                    className="mb-4 opacity-90"
                   />
                   <p className="text-[15px] font-semibold text-text-primary mb-1">
                     ChatGPT
@@ -264,8 +264,8 @@ export function ChatPanel({
                   )}
                 >
                   {msg.role === "assistant" && (
-                    <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-accent/10">
-                      <OpenAILogo size={12} className="text-accent" />
+                    <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-md">
+                      <OpenAILogoImage size={20} />
                     </div>
                   )}
                   <div
@@ -286,9 +286,9 @@ export function ChatPanel({
               {isStreaming && streamingContent && (
                 <div className="flex gap-3 justify-start">
                   <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-accent/10">
-                    <OpenAILogo
-                      size={12}
-                      className="text-accent animate-pulse"
+                    <OpenAILogoImage
+                      size={20}
+                      className="animate-pulse opacity-90"
                     />
                   </div>
                   <div className="max-w-[85%] rounded-lg bg-surface-elevated/60 px-3 py-2.5 text-[13px] leading-relaxed text-text-secondary">
@@ -303,9 +303,9 @@ export function ChatPanel({
               {isStreaming && !streamingContent && (
                 <div className="flex gap-3 justify-start">
                   <div className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-md bg-accent/10">
-                    <OpenAILogo
-                      size={12}
-                      className="text-accent animate-pulse"
+                    <OpenAILogoImage
+                      size={20}
+                      className="animate-pulse opacity-90"
                     />
                   </div>
                   <div className="rounded-lg bg-surface-elevated/60 px-3 py-2.5">

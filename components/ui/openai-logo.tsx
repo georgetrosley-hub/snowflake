@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 interface OpenAILogoProps {
@@ -7,7 +8,24 @@ interface OpenAILogoProps {
   size?: number;
 }
 
-/** OpenAI/ChatGPT-style mark for UI branding */
+const LOGO_PATH = "/openai-logo.png";
+
+/** Official OpenAI logo (black/white knot) — favicon, sidebar, headers */
+export function OpenAILogoImage({ className, size = 20 }: OpenAILogoProps) {
+  return (
+    <Image
+      src={LOGO_PATH}
+      alt="OpenAI"
+      width={size}
+      height={size}
+      className={cn("shrink-0 object-contain", className)}
+      priority
+      unoptimized
+    />
+  );
+}
+
+/** SVG fallback for small or colored contexts */
 export function OpenAILogo({ className, size = 20 }: OpenAILogoProps) {
   return (
     <svg

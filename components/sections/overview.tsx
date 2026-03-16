@@ -5,7 +5,7 @@ import { AlertTriangle, ArrowRight, Crosshair, Users, Eye, CircleDot, Zap, Targe
 import { SectionHeader } from "@/components/ui/section-header";
 import type { SectionId } from "@/components/layout/sidebar";
 import { MetricCard } from "@/components/ui/metric-card";
-import { OpenAILogo } from "@/components/ui/openai-logo";
+import { OpenAILogoImage } from "@/components/ui/openai-logo";
 import { useToast } from "@/app/context/toast-context";
 import { isStale } from "@/lib/deal-health";
 import { getPlansForThisWeek, getPlansForThisWeekShort } from "@/lib/plans-for-week";
@@ -108,7 +108,7 @@ export function Overview({
     >
       {/* Recruiter-facing: OpenAI product feel */}
       <div className="flex flex-wrap items-center gap-2 rounded-xl border border-accent/15 bg-accent/[0.04] px-4 py-3">
-        <OpenAILogo size={16} className="text-accent" />
+        <OpenAILogoImage size={18} className="opacity-95" />
         <span className="text-[12px] font-medium text-text-primary">
           Enterprise GTM war room — built to feel like an OpenAI product
         </span>
@@ -317,7 +317,7 @@ export function Overview({
         <aside className="min-w-0 space-y-4">
           <div className="rounded-[28px] border border-accent/15 bg-accent/[0.05] p-4 sm:p-6">
             <div className="flex items-center gap-2">
-              <OpenAILogo size={14} className="text-accent" />
+              <OpenAILogoImage size={16} className="opacity-90" />
               <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-accent/80">
                 My current take
               </p>

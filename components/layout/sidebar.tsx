@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { OpenAILogo } from "@/components/ui/openai-logo";
+import { OpenAILogoImage } from "@/components/ui/openai-logo";
 import {
   FileText,
   Users,
@@ -98,8 +98,8 @@ function SidebarBody({
       <div className={cn("relative px-5 py-5", compact && "px-3 py-4")}>
         <div className="flex items-center justify-between gap-2">
           <div className={cn("flex items-center gap-2", compact && "justify-center")}>
-            <div className="flex h-6 w-6 items-center justify-center rounded-md bg-accent/10">
-              <OpenAILogo size={14} className="text-accent" />
+            <div className="flex h-6 w-6 items-center justify-center overflow-hidden rounded-md">
+              <OpenAILogoImage size={24} className="h-full w-full object-contain" />
             </div>
             {!compact && (
               <div>
