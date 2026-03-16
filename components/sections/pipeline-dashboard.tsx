@@ -108,7 +108,7 @@ export function PipelineDashboard() {
       </div>
 
       <p className="text-[12px] text-text-faint max-w-2xl">
-        How I'd run these accounts: multiple deals in motion, clear next steps, and a path to close.
+        How I&apos;d run these accounts: multiple deals in motion, clear next steps, and a path to close.
       </p>
     </motion.div>
   );
