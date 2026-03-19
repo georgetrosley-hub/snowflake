@@ -193,6 +193,95 @@ export function Overview({
   const activeDossierAccount =
     territoryPriorityAccounts.find((priority) => priority.id === activeDossierId) ??
     territoryPriorityAccounts[0];
+  const dossierInsights = useMemo(() => {
+    const p = activeDossierAccount;
+    return {
+      business: {
+        filings: "Public disclosures indicate enterprise modernization priorities with governance and execution consistency themes.",
+        earnings: "Leadership commentary signals pressure for faster delivery and higher productivity from core data initiatives.",
+        signals: `Current public signal set points to active transformation motion in ${p.industry}.`,
+        inference: `${p.name} likely prioritizes outcomes that improve decision velocity without increasing risk exposure.`,
+      },
+      financial: {
+        filings: "Language in filings supports selective investment tied to measurable business outcomes.",
+        earnings: "Earnings framing suggests phased commitments over broad upfront platform changes.",
+        signals: "Program cadence and hiring patterns indicate appetite for practical, staged execution.",
+        inference: "A narrowly scoped pilot with explicit success criteria is the lowest-friction buying path.",
+      },
+      earnings10k: {
+        filings: "Risk sections typically emphasize execution complexity, governance obligations, and change-management risk.",
+        earnings: "Calls emphasize accountability for delivery speed and operational resilience.",
+        signals: "Stakeholder ownership appears cross-functional across business, platform, and risk teams.",
+        inference: "Win probability increases when governance and speed are solved in the same first motion.",
+      },
+      cloudAi: {
+        filings: "Public messaging suggests cloud modernization with control and compliance as baseline requirements.",
+        earnings: "AI priorities are framed as practical productivity gains, not speculative experimentation.",
+        signals: `Current hypothesis indicates ${p.pressure.toLowerCase()}.`,
+        inference: "Do not assume exact spend or vendor footprint; lead with governed execution posture instead.",
+      },
+      competitive: {
+        filings: "Incumbent and default-path inertia are likely embedded in current operating models.",
+        earnings: "Leadership appears open to alternatives that reduce complexity while preserving control.",
+        signals: `Observed pressure today: ${p.pressure}`,
+        inference: "Position against Databricks on enterprise governance, cross-functional adoption, and measurable workflow outcomes.",
+      },
+      snowflakePov: {
+        bestLand: p.likelyLand,
+        expansionPath: p.expansionPath,
+        positioningVsDatabricks:
+          "Compete on governed enterprise execution: faster path to measurable business outcomes with lower cross-team coordination risk.",
+        filings: "Governance and execution themes support a control-first commercial entry.",
+        earnings: "Productivity themes support outcomes-led pilot economics.",
+        signals: `Public signals and account hypothesis indicate urgency around ${p.nextMove.toLowerCase()}.`,
+        inference: "Land narrow, prove impact, then expand through adjacent workloads.",
+      },
+      actionPlan: {
+        discoveryAngles: [
+          "Where does delayed data-to-decision flow create the highest business cost right now?",
+          "What governance blockers are slowing deployment confidence across teams?",
+          "Which 90-day result would justify expansion sponsorship from leadership?",
+        ],
+        talkTracks: [
+          "We can improve delivery speed without trading away governance.",
+          "Start with one workflow that leadership already cares about and prove value fast.",
+          "This is a territory execution decision, not just a tooling preference debate.",
+        ],
+        nextSteps: [
+          p.nextMove,
+          "Run a cross-functional discovery session with business, platform, and security.",
+          "Lock pilot scope, success metrics, and executive review cadence.",
+        ],
+        filings: "Control and execution language supports a disciplined pilot path.",
+        earnings: "Outcome accountability supports a measurable first-motion narrative.",
+        signals: "Public indicators support immediate qualification and stakeholder threading.",
+        inference: "Move now while evaluation criteria are still being shaped.",
+      },
+    };
+  }, [activeDossierAccount]);
+
+  const renderLabeledInsight = (
+    label: "From filings" | "From earnings" | "Public signals" | "Inference",
+    text: string,
+    emphasize = false
+  ) => (
+    <div
+      className={`rounded-xl p-3 ${
+        emphasize
+          ? "border border-accent/25 bg-accent/[0.06]"
+          : "border border-surface-border/50 bg-surface-muted/30"
+      }`}
+    >
+      <p
+        className={`text-[10px] uppercase tracking-[0.1em] ${
+          emphasize ? "text-accent/90" : "text-text-faint"
+        }`}
+      >
+        {label}
+      </p>
+      <p className="mt-1.5 text-[12px] text-text-secondary">{text}</p>
+    </div>
+  );
 
   return (
     <div className="space-y-10 sm:space-y-12">
@@ -307,107 +396,109 @@ export function Overview({
         </div>
 
         {activeDossierTab === "Business Overview" && (
-          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Operating Context</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Enterprise transformation program in motion with high visibility and strict governance expectations.</p>
-            </div>
-            <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Commercial Objective</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Land a measurable initial workload and establish platform credibility with executive buyers.</p>
-            </div>
+          <div className="mt-5 space-y-3">
+            {renderLabeledInsight("From filings", dossierInsights.business.filings)}
+            {renderLabeledInsight("From earnings", dossierInsights.business.earnings)}
+            {renderLabeledInsight("Public signals", dossierInsights.business.signals)}
+            {renderLabeledInsight("Inference", dossierInsights.business.inference, true)}
           </div>
         )}
 
         {activeDossierTab === "Financial Snapshot" && (
-          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Budget Climate</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Selective spend with preference for initiatives tied to measurable business outcomes.</p>
-            </div>
-            <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Investment Trigger</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Consolidation, faster analytics delivery, and lower governance risk in one motion.</p>
-            </div>
-            <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Buying Motion</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Cross-functional approval path led by data platform leadership and finance oversight.</p>
-            </div>
+          <div className="mt-5 space-y-3">
+            {renderLabeledInsight("From filings", dossierInsights.financial.filings)}
+            {renderLabeledInsight("From earnings", dossierInsights.financial.earnings)}
+            {renderLabeledInsight("Public signals", dossierInsights.financial.signals)}
+            {renderLabeledInsight("Inference", dossierInsights.financial.inference, true)}
           </div>
         )}
 
         {activeDossierTab === "10-K / Earnings Signals" && (
           <div className="mt-5 space-y-3">
-            <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Strategic Signal</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Leadership messaging emphasizes productivity, operational resilience, and AI-driven efficiency.</p>
-            </div>
-            <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Execution Signal</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Recent disclosures suggest demand for governed data access and accelerated analytics cycles.</p>
-            </div>
+            {renderLabeledInsight("From filings", dossierInsights.earnings10k.filings)}
+            {renderLabeledInsight("From earnings", dossierInsights.earnings10k.earnings)}
+            {renderLabeledInsight("Public signals", dossierInsights.earnings10k.signals)}
+            {renderLabeledInsight("Inference", dossierInsights.earnings10k.inference, true)}
           </div>
         )}
 
         {activeDossierTab === "Cloud & AI Posture" && (
-          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Cloud Posture</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Multi-cloud and partner-influenced architecture with active modernization workstreams.</p>
-            </div>
-            <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">AI Readiness</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Strong demand for AI use cases, constrained by governance, reliability, and platform fragmentation.</p>
-            </div>
+          <div className="mt-5 space-y-3">
+            {renderLabeledInsight("From filings", dossierInsights.cloudAi.filings)}
+            {renderLabeledInsight("From earnings", dossierInsights.cloudAi.earnings)}
+            {renderLabeledInsight("Public signals", dossierInsights.cloudAi.signals)}
+            {renderLabeledInsight("Inference", dossierInsights.cloudAi.inference, true)}
           </div>
         )}
 
         {activeDossierTab === "Competitive Landscape" && (
-          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
-            <div className="rounded-xl border border-rose-400/20 bg-rose-400/[0.05] p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-rose-300/90">Primary Incumbent</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Databricks technical preference in core engineering teams.</p>
-            </div>
-            <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.05] p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-amber-300/90">Cloud Influence</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Cloud-native defaults and credit structures shape short-term decisions.</p>
-            </div>
-            <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Win Condition</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Narrowly defined business workflow where governance and time-to-value are non-negotiable.</p>
-            </div>
+          <div className="mt-5 space-y-3">
+            {renderLabeledInsight("From filings", dossierInsights.competitive.filings)}
+            {renderLabeledInsight("From earnings", dossierInsights.competitive.earnings)}
+            {renderLabeledInsight("Public signals", dossierInsights.competitive.signals)}
+            {renderLabeledInsight("Inference", dossierInsights.competitive.inference, true)}
           </div>
         )}
 
         {activeDossierTab === "Snowflake POV" && (
           <div className="mt-5 space-y-3">
             <div className="rounded-xl border border-accent/25 bg-accent/[0.06] p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-accent/90">Core POV</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Position Snowflake as the governed enterprise execution layer for analytics and AI expansion.</p>
+              <p className="text-[10px] uppercase tracking-[0.1em] text-accent/90">Best Land</p>
+              <p className="mt-1.5 text-[12px] text-text-secondary">{dossierInsights.snowflakePov.bestLand}</p>
             </div>
             <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Commercial Narrative</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Lead with measurable business impact, then scale via adjacent workloads and broader stakeholder sponsorship.</p>
+              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Expansion Path</p>
+              <p className="mt-1.5 text-[12px] text-text-secondary">{dossierInsights.snowflakePov.expansionPath}</p>
             </div>
+            <div className="rounded-xl border border-rose-400/20 bg-rose-400/[0.05] p-3">
+              <p className="text-[10px] uppercase tracking-[0.1em] text-rose-300/90">Positioning vs Databricks</p>
+              <p className="mt-1.5 text-[12px] text-text-secondary">{dossierInsights.snowflakePov.positioningVsDatabricks}</p>
+            </div>
+            {renderLabeledInsight("From filings", dossierInsights.snowflakePov.filings)}
+            {renderLabeledInsight("From earnings", dossierInsights.snowflakePov.earnings)}
+            {renderLabeledInsight("Public signals", dossierInsights.snowflakePov.signals)}
+            {renderLabeledInsight("Inference", dossierInsights.snowflakePov.inference, true)}
           </div>
         )}
 
         {activeDossierTab === "Action Plan" && (
-          <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-3">
+          <div className="mt-5 space-y-3">
             <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Next 7 Days</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Confirm champion, align success metrics, and schedule technical validation session.</p>
+              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Discovery Angles</p>
+              <ul className="mt-1.5 list-disc space-y-1 pl-5 text-[12px] text-text-secondary">
+                {dossierInsights.actionPlan.discoveryAngles.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
             <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Next 30 Days</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Launch pilot with clear governance gates and executive update cadence.</p>
+              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Talk Tracks</p>
+              <ul className="mt-1.5 list-disc space-y-1 pl-5 text-[12px] text-text-secondary">
+                {dossierInsights.actionPlan.talkTracks.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
-            <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Expansion Trigger</p>
-              <p className="mt-1.5 text-[12px] text-text-secondary">Use pilot outcomes to open second workload and formalize expansion plan.</p>
+            <div className="rounded-xl border border-accent/25 bg-accent/[0.06] p-3">
+              <p className="text-[10px] uppercase tracking-[0.1em] text-accent/90">Next Steps</p>
+              <ul className="mt-1.5 list-disc space-y-1 pl-5 text-[12px] text-text-secondary">
+                {dossierInsights.actionPlan.nextSteps.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
             </div>
+            {renderLabeledInsight("From filings", dossierInsights.actionPlan.filings)}
+            {renderLabeledInsight("From earnings", dossierInsights.actionPlan.earnings)}
+            {renderLabeledInsight("Public signals", dossierInsights.actionPlan.signals)}
+            {renderLabeledInsight("Inference", dossierInsights.actionPlan.inference, true)}
           </div>
         )}
+
+        <div className="mt-4 rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2">
+          <p className="text-[10px] text-text-faint">
+            Fact/inference labels separate observed public context from strategy interpretation. No exact cloud spend or vendor usage values are asserted.
+          </p>
+        </div>
       </section>
 
       {/* Territory execution snapshot */}
