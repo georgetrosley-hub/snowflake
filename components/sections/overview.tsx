@@ -1,36 +1,19 @@
 "use client";
 
-import { useMemo, useRef, useCallback, useState, useEffect } from "react";
-import { ArrowRight, Crosshair, CircleDot, Zap, Target } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { BookOpenCheck, RefreshCcw } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
 import type { SectionId } from "@/components/layout/sidebar";
-import { MetricCard } from "@/components/ui/metric-card";
-import { SnowflakeLogoIcon } from "@/components/ui/snowflake-logo";
-import { useToast } from "@/app/context/toast-context";
-import { isStale } from "@/lib/deal-health";
-import { getPlansForThisWeek, getPlansForThisWeekShort } from "@/lib/plans-for-week";
 import type {
   Account,
-  AccountSignal,
-  AccountUpdate,
   Competitor,
-  ExecutionItem,
+  AccountSignal,
   Stakeholder,
-  WorkspaceDraft,
+  ExecutionItem,
+  AccountUpdate,
+  WorkspaceDraft
 } from "@/types";
 import type { DealHealthSummary } from "@/lib/deal-health";
-
-function getTodayLabel() {
-  const d = new Date();
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-  return `${days[d.getDay()]}, ${months[d.getMonth()]} ${d.getDate()}`;
-}
-
-function formatMillionCurrency(value: number): string | null {
-  if (!Number.isFinite(value) || value <= 0) return null;
-  return `$${value.toFixed(2)}M`;
-}
 
 function formatUpdatedAt(iso?: string): string {
   if (!iso) return "Not refreshed yet";
@@ -61,24 +44,20 @@ interface OverviewProps {
     note: string,
     tag: AccountUpdate["tag"]
   ) => void;
-  onSectionChange?: (id: SectionId) => void;
+  activeSection?: SectionId;
 }
 
 export function Overview({
-  account,
-  competitors,
-  signals,
-  stakeholders,
-  executionItems,
-  accountUpdates,
-  workspaceDraft,
-  pipelineTarget,
-  currentRecommendation,
-  dealHealth,
-  onUpdateWorkspaceField,
-  onAddAccountUpdate,
-  onSectionChange,
+  activeSection,
 }: OverviewProps) {
+  const sectionAnchorByNav: Record<SectionId, string> = {
+    territoryPriorities: "territory-priorities",
+    dailyBriefing: "daily-account-briefing",
+    accountDossiers: "account-dossiers",
+    operatingPriorities: "operating-priorities",
+    executionFramework: "execution-framework",
+    briefingEngine: "briefing-engine",
+  };
   const dossierTabs = [
     "Business Overview",
     "Financial Snapshot",
@@ -96,11 +75,11 @@ export function Overview({
       name: "Tier 1 Account 01",
       industry: "Industry Placeholder",
       why: "Large data estate with high cross-functional demand and executive pressure to improve speed-to-insight.",
-      likelyLand: "Governed data serving foundation for a high-visibility business workflow.",
+      likelyLand: "Analytics and governed reporting for a high-visibility operating workflow.",
       expansionPath: "Expand into AI-assisted analytics, operational decisioning, and data-sharing products.",
-      pressure: "Databricks footprint plus cloud-native status-quo momentum.",
-      personas: "CDAO, VP Data Platform, Head of Analytics, Security lead, Procurement.",
-      hypothesis: "Team will sponsor a narrow pilot if governance and measurable impact are clear up front.",
+      pressure: "Likely Databricks technical momentum plus cloud-native alternatives.",
+      personas: "CDO, Head of Data Engineering, Analytics leader, Governance lead.",
+      hypothesis: "Public signal: modernization pressure is rising. Initial hypothesis: sponsor will back a narrow pilot if governance and speed are both addressed.",
       nextMove: "Run executive alignment call and lock 90-day pilot success metrics.",
     },
     {
@@ -108,11 +87,11 @@ export function Overview({
       name: "Tier 1 Account 02",
       industry: "Industry Placeholder",
       why: "Clear modernization mandate and fragmented analytics stack creating urgent operational friction.",
-      likelyLand: "Unified governed data layer for one mission-critical reporting and planning motion.",
+      likelyLand: "Data engineering + analytics standardization in one mission-critical workflow.",
       expansionPath: "Broaden to enterprise-wide data products, AI workloads, and departmental self-service.",
-      pressure: "Databricks evaluation active with cloud partner influence.",
-      personas: "CIO, Data Engineering Director, Finance analytics leader, Security architect.",
-      hypothesis: "Economic buyer will move quickly if we prove consolidation and faster delivery.",
+      pressure: "Databricks evaluation likely active with cloud-native alternatives in scope.",
+      personas: "CIO, Data Engineering Director, Finance Analytics leader, Security architect.",
+      hypothesis: "Public signal: consolidation language appears in leadership messaging. To validate post-onboarding: incumbent architecture constraints.",
       nextMove: "Secure technical workshop with decision-makers and map incumbent displacement path.",
     },
     {
@@ -120,11 +99,11 @@ export function Overview({
       name: "Tier 1 Account 03",
       industry: "Industry Placeholder",
       why: "High-value data assets and strong executive appetite for governed AI deployment at scale.",
-      likelyLand: "First workload around governed AI-ready data access for a priority domain team.",
+      likelyLand: "AI/ML-ready governed data foundation for one priority domain team.",
       expansionPath: "Scale to additional domains, partner data exchange, and enterprise AI applications.",
-      pressure: "Databricks incumbent plus cloud credits shaping procurement behavior.",
-      personas: "Chief Digital Officer, Head of Data Science, Platform owner, Risk and Compliance.",
-      hypothesis: "Champion exists if we anchor on risk-controlled speed rather than broad transformation.",
+      pressure: "Databricks incumbency likely strong; cloud-native alternatives may shape economics.",
+      personas: "Chief Digital Officer, Head of Data Science, Platform owner, Risk/Compliance.",
+      hypothesis: "Initial hypothesis: risk-controlled speed is the winning narrative. To validate post-onboarding: actual buyer map and approval gates.",
       nextMove: "Identify champion and co-author pilot narrative for steering committee review.",
     },
     {
@@ -132,11 +111,11 @@ export function Overview({
       name: "Tier 1 Account 04",
       industry: "Industry Placeholder",
       why: "Large downstream business impact tied to analytics latency and inconsistent governance standards.",
-      likelyLand: "Governed performance reporting and workload consolidation for a priority business unit.",
+      likelyLand: "Governance + analytics consistency for a priority business unit.",
       expansionPath: "Expand into predictive analytics, AI-powered operations, and cross-region data collaboration.",
-      pressure: "Databricks technical champions and cloud-native procurement default.",
-      personas: "BU President, Head of Data, Enterprise Architect, Information Security, Sourcing.",
-      hypothesis: "A tightly scoped business-case pilot can bypass platform politics and accelerate approval.",
+      pressure: "Databricks technical champions likely active; cloud-native alternatives are default shortlist options.",
+      personas: "BU President, Head of Data, Enterprise Architect, Security leader.",
+      hypothesis: "Public signal: BU urgency is visible. Initial hypothesis: a scoped business-case pilot can bypass platform politics.",
       nextMove: "Present value case with timeline, owners, and go-live criteria in next exec readout.",
     },
     {
@@ -144,11 +123,11 @@ export function Overview({
       name: "Tier 1 Account 05",
       industry: "Industry Placeholder",
       why: "Active transformation program with budget available but no clear governed platform standard yet.",
-      likelyLand: "Initial deployment for secure, shared analytics across key operating teams.",
+      likelyLand: "Secure shared analytics + data sharing across key operating teams.",
       expansionPath: "Move into AI productization, external data distribution, and enterprise workload standardization.",
-      pressure: "Databricks preferred by engineering and cloud vendor co-sell pressure.",
-      personas: "CTO, VP Engineering, Data Governance lead, Line-of-business analytics sponsor.",
-      hypothesis: "Cross-functional support increases once we prove governance without slowing delivery.",
+      pressure: "Databricks preference may exist in engineering; cloud-native alternatives likely in parallel.",
+      personas: "CTO, VP Engineering, Data Governance leader, LoB analytics sponsor.",
+      hypothesis: "Initial hypothesis: support increases once governance is shown without slowing delivery. To validate post-onboarding: current vendor footprint.",
       nextMove: "Launch multi-threaded stakeholder plan and convert current interest into pilot commitment.",
     },
   ] as const;
@@ -162,7 +141,7 @@ export function Overview({
     territoryPriorityAccounts[0].id
   );
   const [activeBriefingWindow, setActiveBriefingWindow] = useState<"24h" | "7d" | "30d" | "12m">("24h");
-  const [briefingOutputTitle, setBriefingOutputTitle] = useState("Account Brief");
+  const [briefingOutputTitle, setBriefingOutputTitle] = useState("Territory Brief");
   const [briefingOutput, setBriefingOutput] = useState<{
     whatChanged: string;
     whyItMatters: string;
@@ -182,46 +161,6 @@ export function Overview({
   const [refreshingAccountId, setRefreshingAccountId] = useState<PriorityAccount["id"] | null>(null);
   const [refreshingDossier, setRefreshingDossier] = useState(false);
   const [refreshingTerritory, setRefreshingTerritory] = useState(false);
-
-  const saveToastRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const { showToast } = useToast();
-
-  const handleWorkspaceFieldChange = useCallback(
-    (field: keyof WorkspaceDraft, value: string) => {
-      onUpdateWorkspaceField(field, value);
-      if (saveToastRef.current) clearTimeout(saveToastRef.current);
-      saveToastRef.current = setTimeout(() => {
-        showToast("Saved");
-        saveToastRef.current = null;
-      }, 600);
-    },
-    [onUpdateWorkspaceField, showToast]
-  );
-  const topCompetitor = [...competitors].sort((a, b) => b.accountRiskLevel - a.accountRiskLevel)[0];
-  const champion = stakeholders.find((stakeholder) => stakeholder.stance === "champion");
-  const championCount = stakeholders.filter(
-    (stakeholder) => stakeholder.stance === "champion" || stakeholder.stance === "ally"
-  ).length;
-  const blockedCount = executionItems.filter((item) => item.status === "blocked").length;
-  const firstDecision = executionItems.find((item) => item.phase === "Land");
-  const expansionItem = executionItems.find((item) => item.phase === "Expansion");
-
-  const todayLabel = useMemo(() => getTodayLabel(), []);
-  const topPriority = executionItems.find((i) => i.status === "blocked") ?? executionItems.find((i) => i.status === "in_progress");
-  const lastUpdate = accountUpdates[0];
-  const plansForThisWeekShort = useMemo(
-    () => getPlansForThisWeekShort(accountUpdates, executionItems),
-    [accountUpdates, executionItems]
-  );
-
-  const blockedItems = executionItems.filter((i) => i.status === "blocked");
-  const needsAttention = executionItems.filter(
-    (i) => i.decisionRequired && i.decisionStatus === "pending"
-  );
-  const staleItems = executionItems.filter((i) => isStale(i.lastUpdated));
-  const firstPilotValue = formatMillionCurrency(account.estimatedLandValue);
-  const expansionPathValue = formatMillionCurrency(account.estimatedExpansionValue);
-  const inPlayValue = formatMillionCurrency(pipelineTarget);
   const activeDossierAccount =
     territoryPriorityAccounts.find((priority) => priority.id === activeDossierId) ??
     territoryPriorityAccounts[0];
@@ -423,8 +362,7 @@ export function Overview({
       databricksImplication: activeBriefing.databricksImplication,
       recommendedAction: activeBriefing.nextBestMove,
     });
-    showToast("Account brief generated");
-  }, [activeBriefing, activeBriefingAccount.name, activeBriefingWindow, showToast]);
+  }, [activeBriefing, activeBriefingAccount.name, activeBriefingWindow]);
 
   const buildTerritoryBrief = useCallback(() => {
     const windows = briefingByAccount;
@@ -442,8 +380,7 @@ export function Overview({
     });
     setTerritoryLastUpdated(new Date().toISOString());
     void windows;
-    showToast("Full territory brief generated");
-  }, [activeBriefingWindow, territoryPriorityAccounts, briefingByAccount, showToast]);
+  }, [activeBriefingWindow, territoryPriorityAccounts, briefingByAccount]);
 
   const refreshTerritoryBrief = useCallback(async () => {
     setRefreshingTerritory(true);
@@ -451,8 +388,7 @@ export function Overview({
     const nowIso = new Date().toISOString();
     setTerritoryLastUpdated(nowIso);
     setRefreshingTerritory(false);
-    showToast("Territory brief refreshed");
-  }, [showToast]);
+  }, []);
 
   const copyNotebookPrompt = useCallback(async () => {
     const source = briefingOutput ?? {
@@ -477,16 +413,14 @@ export function Overview({
     ].join("\n");
     try {
       await navigator.clipboard.writeText(prompt);
-      showToast("NotebookLM prompt copied");
     } catch {
-      showToast("Copy failed");
+      // Clipboard may be unavailable in some environments.
     }
-  }, [activeBriefing, activeBriefingAccount.name, activeBriefingWindow, briefingOutput, showToast]);
+  }, [activeBriefing, activeBriefingAccount.name, activeBriefingWindow, briefingOutput]);
 
   const exportPdf = useCallback(() => {
     window.print();
-    showToast("Print dialog opened");
-  }, [showToast]);
+  }, []);
   const weeklyOperatingPriorities = [
     {
       title: "Secure Tier 1 pilot scope and sponsor alignment",
@@ -656,7 +590,7 @@ export function Overview({
       setRefreshingAccountId(null);
       showToast("Account intelligence refreshed");
     },
-    [showToast]
+    []
   );
 
   const generateAccountPov = useCallback(
@@ -674,9 +608,8 @@ export function Overview({
         databricksImplication: "Databricks remains strong when evaluations stay tool-first instead of outcome-first.",
         recommendedAction: p.nextMove,
       });
-      showToast("Account POV generated");
     },
-    [territoryPriorityAccounts, showToast]
+    [territoryPriorityAccounts]
   );
 
   const refreshDossierAnalysis = useCallback(async () => {
@@ -685,36 +618,37 @@ export function Overview({
     const nowIso = new Date().toISOString();
     setDossierLastUpdated(nowIso);
     setRefreshingDossier(false);
-    showToast("Dossier analysis refreshed");
-  }, [showToast]);
+  }, []);
+
+  useEffect(() => {
+    if (!activeSection) return;
+    const anchor = sectionAnchorByNav[activeSection];
+    document.getElementById(anchor)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [activeSection]);
 
   return (
     <div className="space-y-10 sm:space-y-12">
-      {/* Hero */}
+      {/* SECTION 1: HERO */}
       <div className="rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-5">
-        <div className="flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <SnowflakeLogoIcon size={32} className="shrink-0 opacity-95" />
-            <div>
-              <h1 className="text-[18px] font-semibold tracking-tight text-text-primary sm:text-[20px]">
-                How I Would Operate and Expand This Snowflake Territory
-              </h1>
-              <p className="mt-0.5 text-[13px] text-text-muted">
-                A practical system for prioritizing accounts, tracking market signals, and converting insight into action.
-              </p>
-            </div>
-          </div>
-        </div>
+        <h1 className="text-[20px] font-semibold tracking-tight text-text-primary sm:text-[24px]">
+          How I Would Operate and Expand This Snowflake Territory
+        </h1>
+        <p className="mt-2 text-[13px] text-text-muted">
+          A practical system for prioritizing accounts, building account POVs, tracking market and competitive shifts, and turning insight into action.
+        </p>
         <p className="mt-4 text-[12px] text-text-secondary">
-          This territory view is built for execution cadence: clear priorities, active deal movement, and disciplined expansion planning.
+          This is not a study guide or a fake dashboard. It is how I would get dangerous in the territory as quickly as possible using public signals, structured hypotheses, and disciplined account prioritization.
+        </p>
+        <p className="mt-3 rounded-lg border border-surface-border/50 bg-surface-muted/30 px-3 py-2 text-[11px] text-text-muted">
+          Built using public information only. Internal account details, consumption levels, active opportunities, and competitive footprint still need to be validated post-onboarding.
         </p>
       </div>
 
-      {/* Territory priorities */}
-      <section className="space-y-4">
+      {/* SECTION 2: TERRITORY PRIORITIES */}
+      <section id="territory-priorities" className="space-y-4">
         <SectionHeader
-          title="Territory priorities"
-          subtitle="Top five Tier 1 accounts I would run immediately, with clear land motion, expansion thesis, and next move."
+          title="Territory Priorities"
+          subtitle="Top five priority accounts I would run immediately in this territory."
         />
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
           {territoryPriorityAccounts.map((priority) => (
@@ -750,21 +684,6 @@ export function Overview({
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => refreshAccount(priority.id)}
-                  disabled={refreshingAccountId === priority.id}
-                  className="rounded-lg border border-surface-border/60 bg-surface-muted/40 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary transition-colors hover:border-accent/20 hover:text-text-primary disabled:opacity-60"
-                >
-                  {refreshingAccountId === priority.id ? "Refreshing..." : "Refresh Account"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => generateAccountPov(priority.id)}
-                  className="rounded-lg border border-accent/30 bg-accent/[0.08] px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-accent transition-colors hover:bg-accent/[0.14]"
-                >
-                  Generate Account POV
-                </button>
-                <button
-                  type="button"
                   onClick={() => {
                     setActiveDossierId(priority.id);
                     setActiveDossierTab("Business Overview");
@@ -785,10 +704,31 @@ export function Overview({
         </div>
       </section>
 
-      <section className="rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
+      {/* SECTION 3: THIS WEEK'S OPERATING PRIORITIES */}
+      <section id="operating-priorities" className="rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
+        <SectionHeader
+          title="This Week's Operating Priorities"
+          subtitle="Practical actions to advance account ownership this week."
+        />
+        <div className="mt-4 space-y-2.5">
+          {weeklyOperatingPriorities.slice(0, 5).map((item) => (
+            <article key={item.title} className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
+              <div className="grid grid-cols-1 gap-1.5 text-[12px] sm:grid-cols-[1.2fr_1fr_1fr_1.2fr] sm:gap-3">
+                <p className="text-text-primary"><span className="text-text-faint">Action:</span> {item.title}</p>
+                <p className="text-text-secondary"><span className="text-text-faint">Why now:</span> {item.whyNow}</p>
+                <p className="text-text-secondary"><span className="text-text-faint">Target:</span> {item.targetAccount}</p>
+                <p className="text-text-secondary"><span className="text-text-faint">Expected outcome:</span> {item.expectedOutcome}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* SECTION 4: DAILY ACCOUNT BRIEFING */}
+      <section id="daily-account-briefing" className="rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
         <SectionHeader
           title="Daily Account Briefing"
-          subtitle="How I stay current on account movement and convert signals into decisive field action."
+          subtitle="Example public-signal workflow for turning account changes into next actions."
         />
         <div className="mt-4 flex flex-wrap gap-2">
           {territoryPriorityAccounts.map((priority) => (
@@ -851,94 +791,18 @@ export function Overview({
         </div>
       </section>
 
-      <section className="rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
-        <SectionHeader
-          title="Territory Briefing Engine"
-          subtitle="Field execution tool for fast, executive-ready account and territory briefings."
-        />
-        <div className="mt-4 flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={refreshTerritoryBrief}
-            disabled={refreshingTerritory}
-            className="rounded-lg border border-surface-border/60 bg-surface-muted/40 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary transition-colors hover:border-accent/20 hover:text-text-primary disabled:opacity-60"
-          >
-            {refreshingTerritory ? "Refreshing..." : "Refresh Territory Brief"}
-          </button>
-          <button
-            type="button"
-            onClick={buildAccountBrief}
-            className="rounded-lg border border-accent/30 bg-accent/[0.08] px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-accent transition-colors hover:bg-accent/[0.14]"
-          >
-            Generate Account Brief
-          </button>
-          <button
-            type="button"
-            onClick={buildTerritoryBrief}
-            className="rounded-lg border border-accent/30 bg-accent/[0.08] px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-accent transition-colors hover:bg-accent/[0.14]"
-          >
-            Generate Full Territory Brief
-          </button>
-          <button
-            type="button"
-            onClick={copyNotebookPrompt}
-            className="rounded-lg border border-surface-border/60 bg-surface-muted/40 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary transition-colors hover:border-accent/20 hover:text-text-primary"
-          >
-            Copy NotebookLM Prompt
-          </button>
-          <button
-            type="button"
-            onClick={exportPdf}
-            className="rounded-lg border border-surface-border/60 bg-surface-muted/40 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary transition-colors hover:border-accent/20 hover:text-text-primary"
-          >
-            Export PDF
-          </button>
-          <p className="ml-auto self-center text-[10px] text-text-faint">
-            Last updated: {formatUpdatedAt(territoryLastUpdated)}
-          </p>
-        </div>
-
-        <div className="mt-4 rounded-xl border border-surface-border/50 bg-surface-muted/30 p-4">
-          <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-text-faint">
-            {briefingOutputTitle}
-          </p>
-          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <div className="rounded-lg border border-surface-border/50 bg-surface-elevated/40 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">What changed</p>
-              <p className="mt-1 text-[12px] text-text-secondary">
-                {briefingOutput?.whatChanged ?? activeBriefing.whatChanged}
-              </p>
-            </div>
-            <div className="rounded-lg border border-surface-border/50 bg-surface-elevated/40 p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Why it matters</p>
-              <p className="mt-1 text-[12px] text-text-secondary">
-                {briefingOutput?.whyItMatters ?? activeBriefing.whyItMatters}
-              </p>
-            </div>
-            <div className="rounded-lg border border-accent/25 bg-accent/[0.06] p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-accent/90">Snowflake implication</p>
-              <p className="mt-1 text-[12px] text-text-secondary">
-                {briefingOutput?.snowflakeImplication ?? activeBriefing.snowflakeImplication}
-              </p>
-            </div>
-            <div className="rounded-lg border border-rose-400/20 bg-rose-400/[0.05] p-3">
-              <p className="text-[10px] uppercase tracking-[0.1em] text-rose-300/90">Databricks implication</p>
-              <p className="mt-1 text-[12px] text-text-secondary">
-                {briefingOutput?.databricksImplication ?? activeBriefing.databricksImplication}
-              </p>
-            </div>
-          </div>
-          <div className="mt-2 rounded-lg border border-emerald-400/20 bg-emerald-400/[0.05] p-3">
-            <p className="text-[10px] uppercase tracking-[0.1em] text-emerald-300/90">Recommended action</p>
-            <p className="mt-1 text-[12px] text-text-secondary">
-              {briefingOutput?.recommendedAction ?? activeBriefing.nextBestMove}
-            </p>
-          </div>
-        </div>
-      </section>
-
+      {/* SECTION 5: ACCOUNT DOSSIER */}
       <section
         id="account-dossier-view"
+        className="rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6"
+      >
+        <SectionHeader
+          title="Account Dossier"
+          subtitle="Fact and inference are separated to keep account POVs practical and honest."
+        />
+      </section>
+      <section
+        id="account-dossiers"
         className="rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6"
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
@@ -978,14 +842,14 @@ export function Overview({
             disabled={refreshingDossier}
             className="rounded-lg border border-surface-border/60 bg-surface-muted/40 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary transition-colors hover:border-accent/20 hover:text-text-primary disabled:opacity-60"
           >
-            {refreshingDossier ? "Refreshing..." : "Refresh Analysis"}
+            {refreshingDossier ? "Refreshing..." : "Manual Refresh"}
           </button>
           <button
             type="button"
             onClick={buildAccountBrief}
             className="rounded-lg border border-accent/30 bg-accent/[0.08] px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-accent transition-colors hover:bg-accent/[0.14]"
           >
-            Generate Brief
+            Generate Account Brief
           </button>
           <button
             type="button"
@@ -1107,281 +971,136 @@ export function Overview({
 
         <div className="mt-4 rounded-lg border border-white/10 bg-white/[0.02] px-3 py-2">
           <p className="text-[10px] text-text-faint">
-            Fact/inference labels separate observed public context from strategy interpretation. No exact cloud spend or vendor usage values are asserted.
+            Fact/inference labels separate observed public context from strategy interpretation. Exact cloud spend, Snowflake consumption, and vendor relationships must be validated post-onboarding.
           </p>
         </div>
       </section>
 
-      {/* Territory execution snapshot */}
-      <section className="space-y-4">
+      {/* SECTION 6: EXECUTION FRAMEWORK */}
+      <section id="execution-framework" className="rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
         <SectionHeader
-          title="Territory execution snapshot"
-          subtitle="Current wedge economics, stakeholder coverage, and expansion posture across the patch."
+          title="Execution Framework"
+          subtitle="Compact field cheat sheet for positioning and first-month execution."
         />
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-2 xl:grid-cols-4">
-          <MetricCard
-            label="Revenue in motion"
-            value={inPlayValue ?? "Priority accounts scoped"}
-            subtitle={inPlayValue ? "Near-term land + expansion focus" : "Current week is focused on qualification and wedge definition"}
-          />
-          <MetricCard
-            label="First pilot"
-            value={firstPilotValue ?? "Pilot scope in progress"}
-            subtitle={account.firstWedge}
-          />
-          <MetricCard
-            label="Expansion path"
-            value={expansionPathValue ?? "Expansion thesis defined"}
-            subtitle={account.topExpansionPaths[0]}
-          />
-          <MetricCard
-            label="Deal coverage"
-            value={`${championCount} active threads`}
-            subtitle={`${blockedCount} blocker${blockedCount === 1 ? "" : "s"} requiring active management`}
-          />
+        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+          <article className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
+            <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-text-faint">Snowflake Positioning</p>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-[12px] text-text-secondary">
+              <li>Governed enterprise data + AI platform for production workloads.</li>
+              <li>Land and expand through workload specificity, not broad platform promises.</li>
+              <li>Control plane, governance, and enterprise readiness are core differentiators.</li>
+              <li>Win by proving speed and control in the same first motion.</li>
+            </ul>
+          </article>
+          <article className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
+            <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-text-faint">Core Use Case Entry Points</p>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-[12px] text-text-secondary">
+              <li>Analytics</li>
+              <li>Data engineering</li>
+              <li>AI/ML</li>
+              <li>Apps</li>
+              <li>Governance and sharing</li>
+            </ul>
+          </article>
+          <article className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
+            <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-text-faint">First 30 Days</p>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-[12px] text-text-secondary">
+              <li>Map top accounts and likely workload priorities.</li>
+              <li>Identify active workloads and buying triggers.</li>
+              <li>Validate stakeholder ownership and approval sequence.</li>
+              <li>Validate competitive footprint and likely Databricks exposure.</li>
+              <li>Build first-call POVs for each Tier 1 account.</li>
+            </ul>
+          </article>
+          <article className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
+            <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-text-faint">Competitive Frame</p>
+            <ul className="mt-2 list-disc space-y-1 pl-5 text-[12px] text-text-secondary">
+              <li>Snowflake: enterprise trust, governance, interoperability, workload breadth.</li>
+              <li>Databricks: strong technical momentum in engineering-led motions.</li>
+              <li>Cloud-native alternatives: often default shortlist options on procurement cycles.</li>
+              <li>Position on outcome speed + governance confidence, not tool theater.</li>
+            </ul>
+          </article>
         </div>
       </section>
 
-      {/* Account execution */}
-      <section className="rounded-2xl border border-surface-border bg-surface-elevated p-4 sm:p-6 shadow-elevated">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <p className="text-[11px] font-medium uppercase tracking-wider text-text-muted">
-              {todayLabel} · {account.name}
-            </p>
-            <h1 className="mt-0.5 text-lg font-semibold tracking-tight text-text-primary sm:text-xl">
-              Account execution
-            </h1>
-          </div>
-        </div>
-        <div className="mt-4 flex flex-wrap gap-3">
-          <div
-            className={`flex items-center gap-2 rounded-full px-3 py-1.5 text-[12px] font-medium ${
-              dealHealth.status === "healthy"
-                ? "bg-emerald-500/10 text-emerald-400/90"
-                : dealHealth.status === "attention"
-                  ? "bg-accent/10 text-accent/90"
-                  : "bg-rose-500/10 text-rose-400/90"
-            }`}
-          >
-            <span
-              className={`h-2 w-2 rounded-full ${
-                dealHealth.status === "healthy"
-                  ? "bg-emerald-400"
-                  : dealHealth.status === "attention"
-                    ? "bg-accent"
-                    : "bg-rose-400"
-              }`}
-            />
-            {dealHealth.label}
-          </div>
-          {blockedItems.length > 0 && (
-            <div className="flex items-center gap-2 rounded-full bg-rose-500/10 px-3 py-1.5 text-[12px] font-medium text-rose-400/95">
-              <CircleDot className="h-3.5 w-3.5" />
-              {blockedItems.length} blocker{blockedItems.length === 1 ? "" : "s"}
-            </div>
-          )}
-          {needsAttention.length > 0 && (
-            <div className="flex items-center gap-2 rounded-full bg-accent/10 px-3 py-1.5 text-[12px] font-medium text-accent/90">
-              {needsAttention.length} decision{needsAttention.length === 1 ? "" : "s"} pending
-            </div>
-          )}
-          {staleItems.length > 0 && (
-            <div className="flex items-center gap-2 rounded-full bg-white/5 px-3 py-1.5 text-[12px] text-text-muted">
-              {staleItems.length} stale workstream{staleItems.length === 1 ? "" : "s"}
-            </div>
-          )}
-        </div>
-        <p className="mt-3 text-[12px] text-text-muted">{dealHealth.reason}</p>
-
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <button
-            type="button"
-            onClick={() => document.getElementById("plans-for-this-week-detail")?.scrollIntoView({ behavior: "smooth", block: "start" })}
-            className="flex min-h-[88px] touch-target flex-col justify-start rounded-xl border border-accent/25 bg-surface-muted/50 px-4 py-3.5 text-left transition-colors active:bg-surface-muted/70 hover:bg-surface-muted/70 hover:border-accent/40 sm:min-h-0"
-          >
-            <div className="flex items-center gap-2">
-              <Zap className="h-4 w-4 shrink-0 text-accent" strokeWidth={2} />
-              <p className="text-[11px] font-bold uppercase tracking-wider text-accent">This week&apos;s operating priorities</p>
-            </div>
-            <p className="mt-2.5 whitespace-pre-wrap text-[13px] leading-relaxed text-text-secondary">
-              {plansForThisWeekShort}
-            </p>
-            <p className="mt-1.5 text-[11px] text-text-faint">
-              Tap for full detail ↓
-            </p>
-          </button>
-          <button
-            type="button"
-            onClick={() => onSectionChange?.("first90AndFieldKit")}
-            className="flex min-h-[88px] touch-target flex-col justify-center rounded-xl border border-accent/25 bg-surface-muted/50 px-4 py-4 text-left transition-colors active:bg-surface-muted/70 hover:bg-surface-muted/70 hover:border-accent/40 sm:min-h-0 sm:py-3.5"
-          >
-            <div className="flex items-center gap-2">
-              <ArrowRight className="h-4 w-4 shrink-0 text-accent" strokeWidth={2} />
-              <p className="text-[11px] font-bold uppercase tracking-wider text-accent">Last account update</p>
-            </div>
-            <p className="mt-2 text-[15px] font-bold text-text-primary">
-              {lastUpdate?.title ?? "Daily account reset"}
-            </p>
-            <p className="mt-0.5 text-[13px] text-text-secondary">{lastUpdate?.createdAt ?? "Today"}</p>
-          </button>
-          <button
-            type="button"
-            onClick={() => onSectionChange?.("first90AndFieldKit")}
-            className="flex min-h-[88px] touch-target flex-col justify-center rounded-xl border border-accent/25 bg-surface-muted/50 px-4 py-4 text-left transition-colors active:bg-surface-muted/70 hover:bg-surface-muted/70 hover:border-accent/40 sm:min-h-0 sm:py-3.5"
-          >
-            <div className="flex items-center gap-2">
-              <Target className="h-4 w-4 shrink-0 text-accent" strokeWidth={2} />
-              <p className="text-[11px] font-bold uppercase tracking-wider text-accent">Today&apos;s must-win move</p>
-            </div>
-            <p className="mt-2 text-[15px] font-bold text-text-primary">
-              {topPriority?.title ?? "Define the first pilot"}
-            </p>
-            <p className="mt-0.5 text-[13px] text-text-secondary">
-              {topPriority?.owner ?? champion?.name} · {topPriority?.dueLabel ?? "This week"}
-            </p>
-          </button>
-        </div>
-      </section>
-
-      {/* This week's operating priorities */}
-      <section id="plans-for-this-week-detail" className="scroll-mt-6 space-y-4">
+      {/* SECTION 7: BRIEFING ENGINE */}
+      <section id="briefing-engine" className="rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
         <div className="flex items-center gap-2">
-          <Zap className="h-4 w-4 text-accent/75" strokeWidth={2} />
-          <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-text-faint">
-            This week&apos;s operating priorities
-          </p>
-        </div>
-        <div className="rounded-2xl border border-accent/20 bg-surface-muted/50 p-4 sm:p-5">
-          <div className="space-y-2.5">
-            {weeklyOperatingPriorities.map((item) => (
-              <article
-                key={item.title}
-                className="rounded-xl border border-surface-border/50 bg-surface-elevated/40 p-3"
-              >
-                <div className="grid grid-cols-1 gap-1.5 text-[12px] sm:grid-cols-[1.2fr_1fr_1fr_1.2fr] sm:gap-3">
-                  <p className="text-text-primary"><span className="text-text-faint">Title:</span> {item.title}</p>
-                  <p className="text-text-secondary"><span className="text-text-faint">Why now:</span> {item.whyNow}</p>
-                  <p className="text-text-secondary"><span className="text-text-faint">Target account:</span> {item.targetAccount}</p>
-                  <p className="text-text-secondary"><span className="text-text-faint">Expected outcome:</span> {item.expectedOutcome}</p>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Action-oriented insights */}
-      <section className="space-y-4">
-        <SectionHeader
-          title="Action-oriented insights"
-          subtitle="Signals and competitive context that shape account strategy, urgency, and next actions."
-        />
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(0,1.2fr)]">
-          <div className="rounded-[28px] border border-accent/20 bg-white/[0.02] p-4 sm:p-5">
-            <div className="flex items-center gap-2 text-text-secondary">
-              <Crosshair className="h-4 w-4 text-accent/75" strokeWidth={1.8} />
-              <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-text-faint">
-                Competitive pressure point
-              </p>
-            </div>
-            <p className="mt-4 text-[14px] font-medium text-text-primary">
-              {topCompetitor?.name ?? "Incumbent platform pressure"}
-            </p>
-            <p className="mt-2 text-[13px] leading-relaxed text-text-secondary">
-              {topCompetitor
-                ? `${topCompetitor.strengthAreas.slice(0, 2).join(" · ")}`
-                : "The deal is most at risk when incumbent platforms make the customer default to convenience over quality."}
-            </p>
-            <p className="mt-3 text-[12px] leading-relaxed text-text-muted">
-              Win by forcing a narrow comparison around enterprise governance, measurable outcomes, and the exact workflow where the customer feels pain.
-            </p>
-          </div>
-          <div className="space-y-4">
-            {signals.slice(0, 3).map((signal) => (
-              <div
-                key={signal.id}
-                className="rounded-[22px] border border-accent/20 bg-white/[0.02] px-4 py-4"
-              >
-                <div className="flex flex-wrap items-center gap-2">
-                  <span className="rounded-full border border-white/8 bg-white/[0.04] px-2.5 py-1 text-[10px] uppercase tracking-[0.08em] text-text-faint">
-                    {signal.priority}
-                  </span>
-                  <span className="text-[11px] text-text-faint">
-                    {signal.sourceLabel} · {signal.sourceFreshness}
-                  </span>
-                </div>
-                <p className="mt-3 text-[15px] font-medium text-text-primary">{signal.title}</p>
-                <p className="mt-2 text-[13px] leading-relaxed text-text-secondary">
-                  {signal.summary}
-                </p>
-                <p className="mt-3 text-[12px] leading-relaxed text-accent/80">
-                  {signal.recommendedAction}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Platform narrative (lower on page) */}
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.4fr)_380px]">
-        <section className="min-w-0 rounded-[28px] border border-accent/20 bg-white/[0.02] p-4 sm:p-6">
+          <BookOpenCheck className="h-4 w-4 text-accent/80" />
           <SectionHeader
-            title="Platform narrative and account strategy"
-            subtitle="How I would position Snowflake in this account after priorities, stakeholders, and operating plan are clear."
+            title="Territory Briefing Engine"
+            subtitle="Manual, stable-by-default briefing workflow for meetings, pipeline reviews, and onboarding."
           />
-          <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.12em] text-text-faint">Land motion</p>
-              <p className="mt-3 text-[15px] font-medium text-text-primary">{account.firstWedge}</p>
-              <p className="mt-2 text-[13px] leading-relaxed text-text-secondary">
-                Keep the first sale narrow, measurable, and sponsor-friendly. The first win should earn the right to expand.
-              </p>
+        </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={buildAccountBrief}
+            className="rounded-lg border border-accent/30 bg-accent/[0.08] px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-accent transition-colors hover:bg-accent/[0.14]"
+          >
+            Generate Account Brief
+          </button>
+          <button
+            type="button"
+            onClick={buildTerritoryBrief}
+            className="rounded-lg border border-accent/30 bg-accent/[0.08] px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-accent transition-colors hover:bg-accent/[0.14]"
+          >
+            Generate Full Territory Brief
+          </button>
+          <button
+            type="button"
+            onClick={copyNotebookPrompt}
+            className="rounded-lg border border-surface-border/60 bg-surface-muted/40 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary transition-colors hover:border-accent/20 hover:text-text-primary"
+          >
+            Copy NotebookLM Prompt
+          </button>
+          <button
+            type="button"
+            onClick={exportPdf}
+            className="rounded-lg border border-surface-border/60 bg-surface-muted/40 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary transition-colors hover:border-accent/20 hover:text-text-primary"
+          >
+            Export PDF
+          </button>
+          <button
+            type="button"
+            onClick={refreshTerritoryBrief}
+            disabled={refreshingTerritory}
+            className="rounded-lg border border-surface-border/60 bg-surface-muted/40 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary transition-colors hover:border-accent/20 hover:text-text-primary disabled:opacity-60"
+          >
+            <span className="inline-flex items-center gap-1.5">
+              <RefreshCcw className="h-3.5 w-3.5" />
+              {refreshingTerritory ? "Refreshing..." : "Manual Refresh"}
+            </span>
+          </button>
+          <p className="ml-auto self-center text-[10px] text-text-faint">Last updated: {formatUpdatedAt(territoryLastUpdated)}</p>
+        </div>
+        <div className="mt-4 rounded-xl border border-surface-border/50 bg-surface-muted/30 p-4">
+          <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-text-faint">{briefingOutputTitle}</p>
+          <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <div className="rounded-lg border border-surface-border/50 bg-surface-elevated/40 p-3">
+              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">What changed</p>
+              <p className="mt-1 text-[12px] text-text-secondary">{briefingOutput?.whatChanged ?? activeBriefing.whatChanged}</p>
             </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.12em] text-text-faint">Champion building</p>
-              <p className="mt-3 text-[15px] font-medium text-text-primary">
-                {champion?.title ?? "Likely functional champion"}
-              </p>
-              <p className="mt-2 text-[13px] leading-relaxed text-text-secondary">
-                {champion?.note ?? "Find the operator with urgency, cross-functional influence, and clear upside from a successful pilot."}
-              </p>
+            <div className="rounded-lg border border-surface-border/50 bg-surface-elevated/40 p-3">
+              <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Why it matters</p>
+              <p className="mt-1 text-[12px] text-text-secondary">{briefingOutput?.whyItMatters ?? activeBriefing.whyItMatters}</p>
             </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.12em] text-text-faint">Pilot strategy</p>
-              <p className="mt-3 text-[15px] font-medium text-text-primary">
-                {firstDecision?.title ?? "Define the first pilot"}
-              </p>
-              <p className="mt-2 text-[13px] leading-relaxed text-text-secondary">
-                {firstDecision?.detail ?? "Define owners, timeline, success metrics, and required governance before broad executive escalation."}
-              </p>
+            <div className="rounded-lg border border-accent/25 bg-accent/[0.06] p-3">
+              <p className="text-[10px] uppercase tracking-[0.1em] text-accent/90">Snowflake implication</p>
+              <p className="mt-1 text-[12px] text-text-secondary">{briefingOutput?.snowflakeImplication ?? activeBriefing.snowflakeImplication}</p>
             </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.12em] text-text-faint">Expansion path</p>
-              <p className="mt-3 text-[15px] font-medium text-text-primary">
-                {expansionItem?.title ?? account.topExpansionPaths[0]}
-              </p>
-              <p className="mt-2 text-[13px] leading-relaxed text-text-secondary">
-                Name the second motion early so leadership sees a durable platform decision, not a one-off experiment.
-              </p>
+            <div className="rounded-lg border border-rose-400/20 bg-rose-400/[0.05] p-3">
+              <p className="text-[10px] uppercase tracking-[0.1em] text-rose-300/90">Databricks implication</p>
+              <p className="mt-1 text-[12px] text-text-secondary">{briefingOutput?.databricksImplication ?? activeBriefing.databricksImplication}</p>
             </div>
           </div>
-        </section>
-        <aside className="min-w-0 space-y-4">
-          <div className="rounded-[28px] border border-accent/15 bg-accent/[0.05] p-4 sm:p-6">
-            <div className="flex items-center gap-2">
-              <SnowflakeLogoIcon size={16} className="opacity-90" />
-              <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-accent/80">
-                Current account recommendation
-              </p>
-            </div>
-            <p className="mt-4 text-[16px] leading-relaxed text-text-primary">
-              {currentRecommendation}
-            </p>
+          <div className="mt-2 rounded-lg border border-emerald-400/20 bg-emerald-400/[0.05] p-3">
+            <p className="text-[10px] uppercase tracking-[0.1em] text-emerald-300/90">Recommended action</p>
+            <p className="mt-1 text-[12px] text-text-secondary">{briefingOutput?.recommendedAction ?? activeBriefing.nextBestMove}</p>
           </div>
-        </aside>
-      </div>
+        </div>
+      </section>
     </div>
   );
 }

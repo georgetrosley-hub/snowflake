@@ -5,42 +5,29 @@ import { cn } from "@/lib/utils";
 import { SnowflakeLogoIcon, SnowflakeWordmark } from "@/components/ui/snowflake-logo";
 import {
   MessageCircle,
-  LayoutDashboard,
+  Target,
   PanelLeftClose,
   PanelLeftOpen,
   X,
-  BarChart3,
+  Newspaper,
   FileText,
-  Lightbulb,
-  Sparkles,
-  Calculator,
-  GraduationCap,
+  ClipboardCheck,
+  Compass,
+  BookOpenCheck,
 } from "lucide-react";
 
 const SNOWFLAKE_SUMMIT_URL = "https://www.snowflake.com/en/summit/";
 
-/** Simplified nav for interview: 5 sections, merged content. */
 const sectionGroups = [
   {
-    label: "Territory Execution",
+    label: "Territory Operating System",
     items: [
-      { id: "overview", label: "Territory OS", icon: LayoutDashboard },
-      { id: "pipeline", label: "Pipeline", icon: BarChart3 },
-    ],
-  },
-  {
-    label: "Platform Narrative",
-    items: [
-      { id: "platformStrategy", label: "Platform & Strategy", icon: Sparkles },
-      { id: "roiTco", label: "ROI / TCO Model", icon: Calculator },
-    ],
-  },
-  {
-    label: "Execution & Reference",
-    items: [
-      { id: "first90AndFieldKit", label: "First 90 Days & Field Kit", icon: FileText },
-      { id: "crashCourse", label: "3-Day Crash Course", icon: GraduationCap },
-      { id: "useCasesAndCompetitive", label: "Use Cases & Positioning", icon: Lightbulb },
+      { id: "territoryPriorities", label: "Territory Priorities", icon: Target },
+      { id: "dailyBriefing", label: "Daily Briefing", icon: Newspaper },
+      { id: "accountDossiers", label: "Account Dossiers", icon: FileText },
+      { id: "operatingPriorities", label: "Operating Priorities", icon: ClipboardCheck },
+      { id: "executionFramework", label: "Execution Framework", icon: Compass },
+      { id: "briefingEngine", label: "Briefing Engine", icon: BookOpenCheck },
     ],
   },
 ] as const;

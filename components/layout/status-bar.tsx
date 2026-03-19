@@ -20,18 +20,10 @@ import { SnowflakeLogoIcon } from "@/components/ui/snowflake-logo";
 import type { Account } from "@/types";
 import type { DealHealthSummary } from "@/lib/deal-health";
 
-function formatMillionCurrency(value: number): string | null {
-  if (!Number.isFinite(value) || value <= 0) return null;
-  return `$${value.toFixed(2)}M`;
-}
-
 interface StatusBarProps {
   account: Account;
   accounts: Account[];
   onAccountChange: (id: string) => void;
-  pipelineTarget: number;
-  estimatedArr: number;
-  currentPhase: string;
   signalCount: number;
   pendingDecisions: number;
   oversightStatus: "active" | "idle";
@@ -46,9 +38,6 @@ export function StatusBar({
   account,
   accounts,
   onAccountChange,
-  pipelineTarget,
-  estimatedArr,
-  currentPhase,
   signalCount,
   pendingDecisions,
   oversightStatus,
@@ -197,27 +186,9 @@ export function StatusBar({
               </span>
             )}
             <span className="text-text-muted">
-              <span className="tabular-nums text-text-primary">
-                {formatMillionCurrency(pipelineTarget) ?? "Priorities scoped"}
-              </span>{" "}
-              {formatMillionCurrency(pipelineTarget) ? "in play" : "for this week"}
+              Built using public information only. Internal account details, consumption, opportunities, and competitive footprint must be validated post-onboarding.
             </span>
-            <span className="text-text-muted">
-              <span className="tabular-nums text-accent/90">
-                {formatMillionCurrency(estimatedArr) ?? "Expansion path mapped"}
-              </span>{" "}
-              {formatMillionCurrency(estimatedArr) ? "at stake" : "for next cycle"}
-            </span>
-            {account.id !== "na" && (
-              <span className="hidden text-text-muted md:inline">{currentPhase}</span>
-            )}
-            <span className="text-text-muted">
-              <span className="tabular-nums text-text-secondary">
-                {signalCount > 0 ? signalCount : "Signal scan active"}
-              </span>
-              {" "}
-              {signalCount === 1 ? "signal" : signalCount > 1 ? "signals" : ""}
-            </span>
+            <span className="text-text-muted">{signalCount > 0 ? `${signalCount} public signals tracked` : "Public signal workflow active"}</span>
           </div>
         </div>
       </header>

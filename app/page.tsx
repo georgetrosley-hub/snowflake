@@ -6,16 +6,10 @@ import { Sidebar, type SectionId } from "@/components/layout/sidebar";
 import { StatusBar } from "@/components/layout/status-bar";
 import { ChatPanel } from "@/components/layout/chat-panel";
 import { Overview } from "@/components/sections/overview";
-import { PipelineDashboard } from "@/components/sections/pipeline-dashboard";
-import { PlatformStrategy } from "@/components/sections/platform-strategy";
-import { First90AndFieldKit } from "@/components/sections/first90-and-field-kit";
-import { UseCasesAndPositioning } from "@/components/sections/use-cases-and-positioning";
-import { EnterpriseRoiTco } from "@/components/sections/enterprise-roi-tco";
-import { SnowflakeCrashCourse } from "@/components/sections/snowflake-crash-course";
 import { motion, AnimatePresence } from "framer-motion";
 
 function MainContent() {
-  const [activeSection, setActiveSection] = useState<SectionId>("overview");
+  const [activeSection, setActiveSection] = useState<SectionId>("territoryPriorities");
   const [chatOpen, setChatOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -31,18 +25,10 @@ function MainContent() {
     workspaceDraft,
     currentRecommendation,
     pipelineTarget,
-    currentPhase,
     pendingDecisionCount,
     dealHealth,
     setAccountId,
-    lastDecisionTitle,
-    clearLastDecision,
-    handleApproveDecision,
-    handleDeferDecision,
     updateWorkspaceField,
-    updateStakeholderStance,
-    updateExecutionStatus,
-    updateSignalDisposition,
     addAccountUpdate,
   } = useApp();
 
@@ -66,33 +52,33 @@ function MainContent() {
     setMobileNavOpen(false);
   };
 
-  const estimatedArr = account.estimatedLandValue + account.estimatedExpansionValue * 0.35;
   const oversightStatus = pendingDecisionCount > 0 ? "active" as const : "idle" as const;
 
+  const overviewNode = (
+    <Overview
+      account={account}
+      competitors={competitors}
+      signals={signals}
+      stakeholders={stakeholders}
+      executionItems={executionItems}
+      accountUpdates={accountUpdates}
+      workspaceDraft={workspaceDraft}
+      pipelineTarget={pipelineTarget}
+      currentRecommendation={currentRecommendation}
+      dealHealth={dealHealth}
+      onUpdateWorkspaceField={updateWorkspaceField}
+      onAddAccountUpdate={addAccountUpdate}
+      activeSection={activeSection}
+    />
+  );
+
   const sections: Record<SectionId, React.ReactNode> = {
-    platformStrategy: <PlatformStrategy />,
-    roiTco: <EnterpriseRoiTco />,
-    crashCourse: <SnowflakeCrashCourse />,
-    overview: (
-      <Overview
-        account={account}
-        competitors={competitors}
-        signals={signals}
-        stakeholders={stakeholders}
-        executionItems={executionItems}
-        accountUpdates={accountUpdates}
-        workspaceDraft={workspaceDraft}
-        pipelineTarget={pipelineTarget}
-        currentRecommendation={currentRecommendation}
-        dealHealth={dealHealth}
-        onUpdateWorkspaceField={updateWorkspaceField}
-        onAddAccountUpdate={addAccountUpdate}
-        onSectionChange={handleSectionChange}
-      />
-    ),
-    pipeline: <PipelineDashboard />,
-    first90AndFieldKit: <First90AndFieldKit />,
-    useCasesAndCompetitive: <UseCasesAndPositioning />,
+    territoryPriorities: overviewNode,
+    dailyBriefing: overviewNode,
+    accountDossiers: overviewNode,
+    operatingPriorities: overviewNode,
+    executionFramework: overviewNode,
+    briefingEngine: overviewNode,
   };
 
   return (
@@ -113,9 +99,6 @@ function MainContent() {
           account={account}
           accounts={accounts}
           onAccountChange={handleAccountChange}
-          pipelineTarget={pipelineTarget}
-          estimatedArr={estimatedArr}
-          currentPhase={currentPhase}
           signalCount={signals.length}
           pendingDecisions={pendingDecisionCount}
           oversightStatus={oversightStatus}
