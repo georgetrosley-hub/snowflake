@@ -76,6 +76,7 @@ function MainContent() {
       pipelineTarget={pipelineTarget}
       currentRecommendation={currentRecommendation}
       dealHealth={dealHealth}
+      onSelectAccount={handleAccountChange}
       onUpdateWorkspaceField={updateWorkspaceField}
       onAddAccountUpdate={addAccountUpdate}
     />

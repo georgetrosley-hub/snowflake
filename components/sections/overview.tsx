@@ -37,6 +37,7 @@ interface OverviewProps {
   pipelineTarget: number;
   currentRecommendation: string;
   dealHealth: DealHealthSummary;
+  onSelectAccount: (accountId: string) => void;
   onUpdateWorkspaceField: (field: keyof WorkspaceDraft, value: string) => void;
   onAddAccountUpdate: (
     title: string,
@@ -47,6 +48,7 @@ interface OverviewProps {
 
 export function Overview({
   account,
+  onSelectAccount,
 }: OverviewProps) {
   const dossierTabs = [
     "Business Overview",
@@ -112,15 +114,9 @@ export function Overview({
   ] as const, []);
   type PriorityAccount = (typeof territoryPriorityAccounts)[number];
 
-  const [activeDossierId, setActiveDossierId] = useState<PriorityAccount["id"]>(
-    territoryPriorityAccounts[0].id
-  );
   const [activeDossierTab, setActiveDossierTab] = useState<DossierTab>("Business Overview");
-  const [activeBriefingAccountId, setActiveBriefingAccountId] = useState<PriorityAccount["id"]>(
-    territoryPriorityAccounts[0].id
-  );
   const [activeBriefingWindow, setActiveBriefingWindow] = useState<"24h" | "7d" | "30d" | "12m">("24h");
-  const [briefingOutputTitle, setBriefingOutputTitle] = useState("Territory Brief");
+  const [briefingOutputTitleOverride, setBriefingOutputTitleOverride] = useState<string | null>(null);
   const [briefingOutput, setBriefingOutput] = useState<{
     whatChanged: string;
     whyItMatters: string;
@@ -140,13 +136,15 @@ export function Overview({
   const [refreshingTerritory, setRefreshingTerritory] = useState(false);
   const [dossierFocus, setDossierFocus] = useState(false);
   const dossierFocusTimeoutRef = useRef<number | null>(null);
+  const selectedAccountId =
+    territoryPriorityAccounts.find((p) => p.id === account.id)?.id ??
+    territoryPriorityAccounts[0].id;
 
   useEffect(() => {
-    const nextId = territoryPriorityAccounts.find((p) => p.id === account.id)?.id;
-    if (!nextId) return;
-
-    setActiveDossierId(nextId);
-    setActiveBriefingAccountId(nextId);
+    // Clear derived briefing content when selected account changes
+    // so the panel reflects the current global account context.
+    setBriefingOutput(null);
+    setBriefingOutputTitleOverride(null);
 
     // Optional: subtle focus effect on the dossier section.
     setDossierFocus(true);
@@ -156,7 +154,7 @@ export function Overview({
     dossierFocusTimeoutRef.current = window.setTimeout(() => {
       setDossierFocus(false);
     }, 650);
-  }, [account.id, territoryPriorityAccounts]);
+  }, [selectedAccountId]);
 
   useEffect(() => {
     return () => {
@@ -166,11 +164,9 @@ export function Overview({
     };
   }, []);
   const activeDossierAccount =
-    territoryPriorityAccounts.find((priority) => priority.id === activeDossierId) ??
+    territoryPriorityAccounts.find((priority) => priority.id === selectedAccountId) ??
     territoryPriorityAccounts[0];
-  const activeBriefingAccount =
-    territoryPriorityAccounts.find((priority) => priority.id === activeBriefingAccountId) ??
-    territoryPriorityAccounts[0];
+  const activeBriefingAccount = activeDossierAccount;
   const briefingByAccount: Record<
     PriorityAccount["id"],
     Record<
@@ -290,7 +286,7 @@ export function Overview({
   }), []);
   const activeBriefing = briefingByAccount[activeBriefingAccount.id][activeBriefingWindow];
   const buildAccountBrief = useCallback(() => {
-    setBriefingOutputTitle(`${activeBriefingAccount.name} · ${activeBriefingWindow} Account Brief`);
+    setBriefingOutputTitleOverride(`${activeBriefingAccount.name} · ${activeBriefingWindow} Account Brief`);
     setBriefingOutput({
       whatChanged: activeBriefing.whatChanged,
       whyItMatters: activeBriefing.whyItMatters,
@@ -303,7 +299,7 @@ export function Overview({
   const buildTerritoryBrief = useCallback(() => {
     const windows = briefingByAccount;
     const allAccounts = territoryPriorityAccounts.map((a) => a.name).join(", ");
-    setBriefingOutputTitle(`Full Territory Brief · ${activeBriefingWindow}`);
+    setBriefingOutputTitleOverride(`Full Territory Brief · ${activeBriefingWindow}`);
     setBriefingOutput({
       whatChanged: `Priority-account motion across ${allAccounts} shifted toward clearer sponsor ownership and tighter evaluation criteria in the ${activeBriefingWindow} window.`,
       whyItMatters: "The territory is moving from discovery to decision framing; this is where evaluation rules and win rates are set.",
@@ -481,8 +477,6 @@ export function Overview({
       if (parsed.accountLastUpdated) setAccountLastUpdated(parsed.accountLastUpdated);
       if (parsed.dossierLastUpdated) setDossierLastUpdated(parsed.dossierLastUpdated);
       if (parsed.territoryLastUpdated) setTerritoryLastUpdated(parsed.territoryLastUpdated);
-      if (parsed.briefingOutputTitle) setBriefingOutputTitle(parsed.briefingOutputTitle);
-      if (parsed.briefingOutput) setBriefingOutput(parsed.briefingOutput);
     } catch {
       // Keep defaults if persisted state cannot be parsed.
     }
@@ -496,14 +490,12 @@ export function Overview({
           accountLastUpdated,
           dossierLastUpdated,
           territoryLastUpdated,
-          briefingOutputTitle,
-          briefingOutput,
         })
       );
     } catch {
       // Ignore persistence errors.
     }
-  }, [accountLastUpdated, dossierLastUpdated, territoryLastUpdated, briefingOutputTitle, briefingOutput]);
+  }, [accountLastUpdated, dossierLastUpdated, territoryLastUpdated]);
 
   const refreshAccount = useCallback(
     async (accountId: PriorityAccount["id"]) => {
@@ -514,25 +506,6 @@ export function Overview({
       setRefreshingAccountId(null);
     },
     []
-  );
-
-  const generateAccountPov = useCallback(
-    (accountId: PriorityAccount["id"]) => {
-      setActiveDossierId(accountId);
-      setActiveDossierTab("Snowflake POV");
-      setBriefingOutputTitle(
-        `${territoryPriorityAccounts.find((p) => p.id === accountId)?.name ?? "Priority Account"} · Account POV`
-      );
-      const p = territoryPriorityAccounts.find((priority) => priority.id === accountId) ?? territoryPriorityAccounts[0];
-      setBriefingOutput({
-        whatChanged: `Stakeholder motion around ${p.name} is becoming more decision-oriented and workflow-specific.`,
-        whyItMatters: "The best time to shape evaluation criteria is before requirements harden around incumbent defaults.",
-        snowflakeImplication: `Lead with ${p.likelyLand.toLowerCase()} and tie it to executive-level business outcomes.`,
-        databricksImplication: "Databricks remains strong when evaluations stay tool-first instead of outcome-first.",
-        recommendedAction: p.nextMove,
-      });
-    },
-    [territoryPriorityAccounts]
   );
 
   const refreshDossierAnalysis = useCallback(async () => {
@@ -588,7 +561,7 @@ export function Overview({
         <div className="mt-3 grid grid-cols-1 gap-3 lg:grid-cols-2">
           <article
             className={`rounded-xl p-3 lg:col-span-2 ${
-              activeDossierId === "us-financial-technology"
+              selectedAccountId === "us-financial-technology"
                 ? "border border-accent/45 bg-accent/[0.08]"
                 : "border border-accent/25 bg-accent/[0.03] opacity-85"
             }`}
@@ -606,7 +579,7 @@ export function Overview({
           </article>
           <article
             className={`rounded-xl border bg-surface-muted/30 p-3 ${
-              activeDossierId === "sagent-lending"
+              selectedAccountId === "sagent-lending"
                 ? "border-accent/30"
                 : "border-surface-border/50 opacity-85"
             }`}
@@ -617,7 +590,7 @@ export function Overview({
           </article>
           <article
             className={`rounded-xl border bg-surface-muted/30 p-3 ${
-              activeDossierId === "ciena-corp"
+              selectedAccountId === "ciena-corp"
                 ? "border-accent/30"
                 : "border-surface-border/50 opacity-85"
             }`}
@@ -681,7 +654,7 @@ export function Overview({
             <article
               key={priority.id}
               className={`rounded-2xl border p-4 transition-colors ${
-                activeDossierId === priority.id
+                selectedAccountId === priority.id
                   ? "border-accent/35 bg-accent/[0.05]"
                   : priority.isPrimary
                     ? "border-accent/25 bg-accent/[0.03] opacity-90"
@@ -726,7 +699,7 @@ export function Overview({
                 <button
                   type="button"
                   onClick={() => {
-                    setActiveDossierId(priority.id);
+                    onSelectAccount(priority.id);
                     setActiveDossierTab("Business Overview");
                     document
                       .getElementById("account-dossiers")
@@ -756,9 +729,9 @@ export function Overview({
             <button
               key={priority.id}
               type="button"
-              onClick={() => setActiveBriefingAccountId(priority.id)}
+              onClick={() => onSelectAccount(priority.id)}
               className={`rounded-full px-3 py-1.5 text-[11px] font-medium transition-colors ${
-                activeBriefingAccountId === priority.id
+                selectedAccountId === priority.id
                   ? "border border-accent/30 bg-accent/[0.10] text-accent"
                   : "border border-surface-border/50 bg-surface-muted/40 text-text-muted hover:border-accent/20 hover:text-text-secondary"
               }`}
@@ -1113,7 +1086,9 @@ export function Overview({
           <p className="ml-auto self-center text-[10px] text-text-faint">Last updated: {formatUpdatedAt(territoryLastUpdated)}</p>
         </div>
         <div className="mt-4 rounded-xl border border-surface-border/50 bg-surface-muted/30 p-4">
-          <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-text-faint">{briefingOutputTitle}</p>
+          <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-text-faint">
+            {briefingOutputTitleOverride ?? `${activeBriefingAccount.name} · ${activeBriefingWindow} Account Brief`}
+          </p>
           <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
             <div className="rounded-lg border border-surface-border/50 bg-surface-elevated/40 p-3">
               <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">What changed</p>
