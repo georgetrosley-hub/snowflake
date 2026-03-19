@@ -57,7 +57,7 @@ export function PipelineDashboard() {
             <input
               value={workspaceDraft.opportunityName}
               onChange={(e) => updateWorkspaceField("opportunityName", e.target.value)}
-              placeholder="Tier 1 Account 01 · Priority Workload Expansion"
+              placeholder="U.S. Financial Technology · Priority Workload Expansion"
               className="w-full rounded-lg border border-surface-border/50 bg-surface px-3 py-2 text-[13px] text-text-primary placeholder:text-text-muted/60 focus:border-accent/30 focus:outline-none"
             />
           </div>

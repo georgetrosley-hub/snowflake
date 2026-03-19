@@ -60,69 +60,43 @@ export function Overview({
 
   const territoryPriorityAccounts = useMemo(() => [
     {
-      id: "t1-01",
-      name: "Tier 1 Account 01",
-      industry: "Industry Placeholder",
-      why: "Large data estate with high cross-functional demand and executive pressure to improve speed-to-insight.",
-      likelyLand: "Analytics and governed reporting for a high-visibility operating workflow.",
-      expansionPath: "Expand into AI-assisted analytics, operational decisioning, and data-sharing products.",
-      pressure: "Likely Databricks technical momentum plus cloud-native alternatives.",
-      personas: "CDO, Head of Data Engineering, Analytics leader, Governance lead.",
-      hypothesis: "Likely hypothesis: the buyer will back a narrow land if governance and time-to-value are both explicit. Why I believe it: public modernization pressure and cross-functional urgency. How I would validate it: confirm decision ownership, approval gates, and 90-day success criteria in the first executive working session.",
-      nextMove: "Determine who owns data and AI strategy, how purchase decisions are made, and anchor the first conversation on one business workflow with executive visibility.",
-      validateFirst: "Current Snowflake footprint, Databricks depth in engineering workflows, decision owner alignment, and whether urgency is tied to a measurable business KPI this quarter.",
+      id: "us-financial-technology",
+      name: "U.S. Financial Technology",
+      industry: "Financial Technology",
+      why: "Complex data and risk requirements create strong demand for governed analytics and AI-ready execution.",
+      likelyLand: "Governed analytics and data engineering for a high-visibility operating workflow.",
+      expansionPath: "Expand into AI/ML enablement, secure data sharing, and cross-functional data product delivery.",
+      pressure: "Initial hypothesis: Databricks likely has momentum in engineering-led teams, with cloud-native alternatives in consideration.",
+      personas: "CDO, Head of Data Engineering, Risk/Compliance leader, Analytics leadership.",
+      hypothesis: "Likely hypothesis: the account will prioritize controlled delivery speed over broad platform change. Why I believe it: public signals suggest modernization pressure and governance sensitivity. How I would validate it: confirm decision ownership, risk requirements, and first 90-day success criteria.",
+      nextMove: "Determine who owns data and AI strategy, test where Databricks is entrenched, and anchor the first conversation on one business use case with executive visibility.",
+      validateFirst: "Current Snowflake footprint, competitor depth by workflow, budget ownership, and where urgency is measurable this quarter.",
     },
     {
-      id: "t1-02",
-      name: "Tier 1 Account 02",
-      industry: "Industry Placeholder",
-      why: "Clear modernization mandate and fragmented analytics stack creating urgent operational friction.",
-      likelyLand: "Data engineering + analytics standardization in one mission-critical workflow.",
-      expansionPath: "Broaden to enterprise-wide data products, AI workloads, and departmental self-service.",
-      pressure: "Databricks evaluation likely active with cloud-native alternatives in scope.",
-      personas: "CIO, Data Engineering Director, Finance Analytics leader, Security architect.",
-      hypothesis: "Likely hypothesis: consolidation is now a near-term executive priority tied to operating friction. Why I believe it: leadership messaging emphasizes simplification and delivery speed. How I would validate it: map where data is fragmented today and where Snowflake could unify access, governance, and core workloads.",
-      nextMove: "Test whether Databricks is entrenched in engineering workflows, then position a first land around the highest-friction business use case rather than platform features.",
-      validateFirst: "Where consolidation pain is highest, who controls budget and approval flow, current platform incumbency, and which partner voices influence architecture direction.",
+      id: "sagent-lending",
+      name: "Sagent Lending",
+      industry: "Lending Technology",
+      why: "Platform modernization and delivery pressure suggest a clear need for better governed data execution.",
+      likelyLand: "Data engineering + analytics standardization in one customer-impacting workflow.",
+      expansionPath: "Expand into AI-assisted operations, broader data products, and stronger governance posture.",
+      pressure: "Initial hypothesis: Databricks and cloud-native alternatives are likely present in engineering or ML paths.",
+      personas: "CIO/CTO, Data Platform leader, Product/Operations analytics leader, Security/Governance owner.",
+      hypothesis: "Likely hypothesis: consolidation and execution speed are immediate priorities. Why I believe it: public signals indicate active platform and operating-model change. How I would validate it: map where data is fragmented and where Snowflake can unify access, governance, and workload execution.",
+      nextMove: "Test whether Databricks is entrenched in ML or engineering workflows, then position a first land around the highest-friction business use case rather than platform features.",
+      validateFirst: "Actual platform footprint, buying process and budget owner, partner influence, and where urgency is real versus assumed.",
     },
     {
-      id: "t1-03",
-      name: "Tier 1 Account 03",
-      industry: "Industry Placeholder",
-      why: "High-value data assets and strong executive appetite for governed AI deployment at scale.",
-      likelyLand: "AI/ML-ready governed data foundation for one priority domain team.",
-      expansionPath: "Scale to additional domains, partner data exchange, and enterprise AI applications.",
-      pressure: "Databricks incumbency likely strong; cloud-native alternatives may shape economics.",
-      personas: "Chief Digital Officer, Head of Data Science, Platform owner, Risk/Compliance.",
-      hypothesis: "Likely hypothesis: risk-controlled speed will win over broad platform narratives. Why I believe it: AI urgency is high but governance tolerance is low. How I would validate it: identify active ML initiatives, confirm platform ownership, and verify where governance is blocking productionization.",
-      nextMove: "Determine whether ML and data platform decisions sit with one owner or split owners, and build a first-call POV that ties governed AI delivery to one measurable business outcome.",
-      validateFirst: "Active ML programs, Databricks exposure by team, governance blockers slowing production, and whether data + AI ownership is centralized or fragmented.",
-    },
-    {
-      id: "t1-04",
-      name: "Tier 1 Account 04",
-      industry: "Industry Placeholder",
-      why: "Large downstream business impact tied to analytics latency and inconsistent governance standards.",
-      likelyLand: "Governance + analytics consistency for a priority business unit.",
-      expansionPath: "Expand into predictive analytics, AI-powered operations, and cross-region data collaboration.",
-      pressure: "Databricks technical champions likely active; cloud-native alternatives are default shortlist options.",
-      personas: "BU President, Head of Data, Enterprise Architect, Security leader.",
-      hypothesis: "Likely hypothesis: a BU-led land can move faster than an enterprise-wide platform debate. Why I believe it: public operating pressure is strongest at the BU level. How I would validate it: confirm where urgency is highest and which executive will sponsor a scoped pilot.",
-      nextMove: "Map the BU decision process end-to-end, identify budget ownership, and position Snowflake around faster, governed decisions in the workflow leadership already tracks weekly.",
-      validateFirst: "Which BU has real urgency now, sponsor readiness, incumbent footprint in priority workflows, and how procurement/risk gates affect speed to first land.",
-    },
-    {
-      id: "t1-05",
-      name: "Tier 1 Account 05",
-      industry: "Industry Placeholder",
-      why: "Active transformation program with budget available but no clear governed platform standard yet.",
-      likelyLand: "Secure shared analytics + data sharing across key operating teams.",
-      expansionPath: "Move into AI productization, external data distribution, and enterprise workload standardization.",
-      pressure: "Databricks preference may exist in engineering; cloud-native alternatives likely in parallel.",
-      personas: "CTO, VP Engineering, Data Governance leader, LoB analytics sponsor.",
-      hypothesis: "Likely hypothesis: support expands when governance is proven without slowing delivery. Why I believe it: transformation programs are active but platform standards are unsettled. How I would validate it: confirm current Snowflake footprint, competitor presence, and which partner influences architecture direction.",
-      nextMove: "Identify the first realistic land that can expand over 12-24 months, then multi-thread data, AI, and app stakeholders to lock sponsor alignment before requirements harden.",
-      validateFirst: "Current Snowflake and competitor posture, active transformation workloads with executive visibility, buying authority, and partner-led influence on platform decisions.",
+      id: "ciena-corp",
+      name: "Ciena Corp",
+      industry: "Networking Technology",
+      why: "Cross-functional data and AI demands create an opportunity for a governed platform motion with practical business impact.",
+      likelyLand: "AI/ML-ready governed data foundation for one priority operating or product domain.",
+      expansionPath: "Expand into additional domains, shared data products, and enterprise AI execution patterns.",
+      pressure: "Initial hypothesis: Databricks may hold strength in technical teams while cloud-native alternatives shape procurement defaults.",
+      personas: "Chief Digital/Data leadership, Data Science leadership, Platform owner, Security/Governance.",
+      hypothesis: "Likely hypothesis: risk-controlled speed is the winning narrative for early momentum. Why I believe it: public signals show innovation pressure with enterprise governance expectations. How I would validate it: identify active ML initiatives, confirm ownership model, and verify where governance slows production.",
+      nextMove: "Determine whether data and AI decisions are centralized or split, map where data is fragmented, and propose a first realistic land that can expand over time.",
+      validateFirst: "Current Snowflake/competitor presence, active workloads tied to business priorities, decision process, and partner influence on architecture choices.",
     },
   ] as const, []);
   type PriorityAccount = (typeof territoryPriorityAccounts)[number];
@@ -144,11 +118,9 @@ export function Overview({
     recommendedAction: string;
   } | null>(null);
   const [accountLastUpdated, setAccountLastUpdated] = useState<Record<PriorityAccount["id"], string>>({
-    "t1-01": "",
-    "t1-02": "",
-    "t1-03": "",
-    "t1-04": "",
-    "t1-05": "",
+    "us-financial-technology": "",
+    "sagent-lending": "",
+    "ciena-corp": "",
   });
   const [dossierLastUpdated, setDossierLastUpdated] = useState<string>("");
   const [territoryLastUpdated, setTerritoryLastUpdated] = useState<string>("");
@@ -175,174 +147,106 @@ export function Overview({
       }
     >
   > = useMemo(() => ({
-    "t1-01": {
+    "us-financial-technology": {
       "24h": {
-        keySignals: "Leadership team aligning on near-term operating priorities; data reliability surfaced in internal planning rhythm.",
-        whatChanged: "Decision owners narrowed to business + platform + security trio.",
-        whyItMatters: "Buying motion is becoming more actionable and sponsor-driven.",
-        snowflakeImplication: "Lead with governed execution path for one high-visibility workflow.",
-        databricksImplication: "Databricks remains default technical option if evaluation scope stays tool-centric.",
-        nextBestMove: "Set exec-level discovery call and lock pilot success criteria before architecture deep dive.",
+        keySignals: "Public signals suggest active modernization priorities and tighter execution expectations from leadership.",
+        whatChanged: "Likely decision ownership is converging across business, platform, and governance stakeholders.",
+        whyItMatters: "This is the moment to shape evaluation criteria around business outcomes and control.",
+        snowflakeImplication: "Lead with one governed business workflow where speed and trust both matter.",
+        databricksImplication: "Databricks remains a risk if evaluation remains tooling-centric.",
+        nextBestMove: "Confirm who owns data and AI strategy, then anchor first discovery on one executive-priority workflow.",
       },
       "7d": {
-        keySignals: "Cross-functional alignment improving; urgency around delivery speed increasing.",
-        whatChanged: "Stakeholders moved from exploration to shortlist framing.",
-        whyItMatters: "Commercial narrative can now influence evaluation criteria.",
-        snowflakeImplication: "Anchor on governance + time-to-value in a single workflow.",
-        databricksImplication: "Incumbent engineering preference may define requirements if unchallenged.",
-        nextBestMove: "Drive workflow-specific scorecard that emphasizes measurable business outcomes.",
+        keySignals: "Signals indicate stronger urgency around delivery speed and risk-controlled execution.",
+        whatChanged: "The account appears to be moving from broad exploration to practical decision framing.",
+        whyItMatters: "Early POV quality now directly affects competitive position.",
+        snowflakeImplication: "Frame Snowflake as the fastest governed path to production impact.",
+        databricksImplication: "Incumbent engineering preference can harden if left unchallenged.",
+        nextBestMove: "Build workflow-specific scorecard that ties platform choice to measurable operating outcomes.",
       },
       "30d": {
-        keySignals: "Transformation cadence established with recurring decision checkpoints.",
-        whatChanged: "Risk and control stakeholders now actively shaping path-to-production.",
-        whyItMatters: "Deals will favor platforms that satisfy governance without slowing delivery.",
-        snowflakeImplication: "Differentiate on enterprise control and cross-team adoption.",
-        databricksImplication: "Competitive pressure rises where technical proof is separated from business proof.",
-        nextBestMove: "Run joint workshop with business + security + platform to scope first land motion.",
+        keySignals: "Recurring checkpoints suggest formalized buying motion with governance influence.",
+        whatChanged: "Risk and control stakeholders likely moved into core decision path.",
+        whyItMatters: "Selection will favor practical production readiness over pure feature comparison.",
+        snowflakeImplication: "Differentiate on enterprise governance with fast execution.",
+        databricksImplication: "Competitive pressure increases if business proof is weak.",
+        nextBestMove: "Run joint business-platform-security workshop to scope first land and expansion path.",
       },
       "12m": {
-        keySignals: "Enterprise roadmap points to broader platform standardization and AI operating model maturity.",
-        whatChanged: "Decision lens shifted from point capability to durable platform outcomes.",
-        whyItMatters: "Long-cycle expansion potential is significant if first workload lands cleanly.",
-        snowflakeImplication: "Win first wedge, then expand through adjacent governed AI and data-sharing workloads.",
-        databricksImplication: "Long-term incumbent inertia persists without early multi-threaded sponsorship.",
-        nextBestMove: "Map year-long expansion sequence before pilot launch to avoid one-off outcome.",
+        keySignals: "Longer-horizon signals point to platform standardization and AI operating-model maturity.",
+        whatChanged: "Decision criteria are likely shifting from point capabilities to durable outcomes.",
+        whyItMatters: "First land quality will determine expansion ceiling.",
+        snowflakeImplication: "Win narrow first motion, then expand via adjacent governed workloads.",
+        databricksImplication: "Incumbent inertia persists without early executive sponsorship.",
+        nextBestMove: "Define 12-month land-to-expand sequence before pilot launch.",
       },
     },
-    "t1-02": {
+    "sagent-lending": {
       "24h": {
-        keySignals: "Program leads prioritizing simplification and faster reporting cycles.",
-        whatChanged: "Current-state friction now framed as business risk, not technical debt alone.",
-        whyItMatters: "Economic buyer relevance increased in the near term.",
-        snowflakeImplication: "Position Snowflake as low-friction consolidation path with governance confidence.",
-        databricksImplication: "Databricks gains if discussion remains centered on engineering preference.",
-        nextBestMove: "Secure business-owner interview and quantify one workflow delay impact.",
+        keySignals: "Public signals indicate active operating pressure and focus on delivery simplification.",
+        whatChanged: "Current friction is likely now framed as business risk, not technical debt.",
+        whyItMatters: "Economic buyer attention is likely increasing.",
+        snowflakeImplication: "Position Snowflake as governed consolidation path with practical time-to-value.",
+        databricksImplication: "Databricks gains where conversation stays engineering-first.",
+        nextBestMove: "Quantify one high-cost workflow delay and tie first land to that outcome.",
       },
       "7d": {
-        keySignals: "Modernization roadmap discussions now include platform rationalization criteria.",
-        whatChanged: "Evaluation shifted from tools to operating model fit.",
-        whyItMatters: "Commercial differentiation has more influence than feature parity.",
-        snowflakeImplication: "Lead with measurable operating improvement and controlled rollout.",
-        databricksImplication: "Competitive narrative likely pushes flexibility and existing familiarity.",
-        nextBestMove: "Publish a one-page pilot charter with owners, timeline, and governance gates.",
+        keySignals: "Modernization language suggests platform rationalization is now explicit.",
+        whatChanged: "Evaluation appears to be moving from tools to operating-model fit.",
+        whyItMatters: "Outcome framing now matters more than feature parity.",
+        snowflakeImplication: "Lead with measured operating improvement and controlled rollout.",
+        databricksImplication: "Incumbent familiarity remains a durable competitor lever.",
+        nextBestMove: "Publish one-page pilot charter with owners, timeline, governance gates, and success metrics.",
       },
       "30d": {
-        keySignals: "Stakeholder map expanded to finance and procurement oversight.",
-        whatChanged: "Buying process formalized with clearer risk/return scrutiny.",
-        whyItMatters: "Decision quality will favor business-case clarity over technical novelty.",
-        snowflakeImplication: "Use outcome-linked business case as primary selling asset.",
-        databricksImplication: "Cloud and incumbent momentum can sway procurement without business proof.",
-        nextBestMove: "Lead executive session on KPI-linked pilot outcomes and approval path.",
+        keySignals: "Stakeholder map likely expanded to include finance and procurement oversight.",
+        whatChanged: "Buying process appears formalized with clearer risk/return criteria.",
+        whyItMatters: "Business-case clarity will likely outweigh technical novelty.",
+        snowflakeImplication: "Use KPI-linked business case as primary selling asset.",
+        databricksImplication: "Cloud and incumbent momentum can sway procurement without strong business proof.",
+        nextBestMove: "Lead executive session on KPI-linked pilot outcomes and approval sequence.",
       },
       "12m": {
-        keySignals: "Account trajectory indicates phased consolidation with broad AI-readiness ambition.",
-        whatChanged: "Strategic intent moved from tactical fixes to platform-level governance standards.",
-        whyItMatters: "Expansion path is material if first deployment creates repeatable trust.",
-        snowflakeImplication: "Design first land to be replicable across adjacent departments.",
-        databricksImplication: "Entrenched defaults will harden if no early executive win is secured.",
+        keySignals: "Trajectory suggests phased consolidation with broader AI-readiness ambition.",
+        whatChanged: "Intent appears to be shifting from tactical fixes to platform standards.",
+        whyItMatters: "Expansion opportunity is significant if first land creates repeatable trust.",
+        snowflakeImplication: "Design first land to be reusable across adjacent teams.",
+        databricksImplication: "Entrenched defaults harden without early executive win.",
         nextBestMove: "Pre-wire expansion playbook with two follow-on workloads before first signature.",
       },
     },
-    "t1-03": {
+    "ciena-corp": {
       "24h": {
-        keySignals: "AI discussions are active with explicit risk and governance language.",
-        whatChanged: "Pilot appetite increased, but only with clear controls.",
-        whyItMatters: "Timing is favorable for a governed-first land message.",
+        keySignals: "Public signals suggest active AI interest with governance and control requirements.",
+        whatChanged: "Pilot appetite likely improved if risk controls are explicit.",
+        whyItMatters: "Timing favors governed-first land positioning.",
         snowflakeImplication: "Position first motion as AI-ready data execution with enterprise safeguards.",
-        databricksImplication: "Technical teams may default to existing patterns absent a business-led wedge.",
-        nextBestMove: "Align champion on one AI-adjacent workflow with measurable success metrics.",
+        databricksImplication: "Technical teams can default to incumbent patterns without business-led wedge.",
+        nextBestMove: "Align likely champion on one AI-adjacent workflow with measurable success metrics.",
       },
       "7d": {
-        keySignals: "Stakeholders converging around practical use-case sequencing.",
-        whatChanged: "From broad AI ambition to specific deployment requirements.",
-        whyItMatters: "Decision process is now concrete enough for commercial planning.",
+        keySignals: "Stakeholders appear to be converging around practical use-case sequencing.",
+        whatChanged: "Conversation likely shifted from broad AI ambition to deployment requirements.",
+        whyItMatters: "Buying motion is becoming concrete enough for focused commercial planning.",
         snowflakeImplication: "Frame Snowflake as governed execution layer for business-ready AI.",
-        databricksImplication: "Databricks retains influence where evaluation is purely model/engineering oriented.",
-        nextBestMove: "Run discovery on deployment blockers and governance acceptance criteria.",
+        databricksImplication: "Databricks retains influence where evaluation stays model/engineering oriented.",
+        nextBestMove: "Run discovery on deployment blockers, ownership model, and governance acceptance criteria.",
       },
       "30d": {
-        keySignals: "Cross-functional teams coordinating around risk and rollout cadence.",
-        whatChanged: "Security and compliance moved from late-stage check to core decision makers.",
+        keySignals: "Cross-functional coordination likely increasing around risk and rollout cadence.",
+        whatChanged: "Security/compliance likely moved into core decision path.",
         whyItMatters: "Platform choice will be determined by production readiness, not prototypes.",
-        snowflakeImplication: "Emphasize controlled deployment velocity and enterprise governance.",
-        databricksImplication: "Competitive threat increases if proof-of-concept success is mistaken for production readiness.",
-        nextBestMove: "Co-author production pilot plan with security stakeholder sponsorship.",
+        snowflakeImplication: "Emphasize controlled deployment velocity with enterprise governance.",
+        databricksImplication: "Competitive threat rises if prototype success is confused with production readiness.",
+        nextBestMove: "Co-author production pilot plan with security stakeholder sponsorship and clear operating metrics.",
       },
       "12m": {
-        keySignals: "Long-term posture points to scaled AI adoption tied to governed data foundations.",
-        whatChanged: "Roadmap orientation shifted toward reusable operating patterns.",
-        whyItMatters: "Landing the first governed workflow can unlock broad platform expansion.",
+        keySignals: "Longer-term posture indicates scaled AI adoption tied to governed data foundations.",
+        whatChanged: "Roadmap likely shifting toward reusable operating patterns.",
+        whyItMatters: "Landing first governed workflow can unlock broader expansion.",
         snowflakeImplication: "Build expansion around repeatable domain rollouts and shared governance model.",
-        databricksImplication: "Persistent technical incumbency can block enterprise standardization without executive proof.",
+        databricksImplication: "Technical incumbency can block standardization without executive proof.",
         nextBestMove: "Define multi-domain expansion blueprint aligned to annual planning cycle.",
-      },
-    },
-    "t1-04": {
-      "24h": {
-        keySignals: "BU leaders highlighting operational performance pressure tied to analytics consistency.",
-        whatChanged: "Business unit urgency overtook enterprise architecture debate.",
-        whyItMatters: "Opportunity to land through accountable BU execution.",
-        snowflakeImplication: "Target one high-impact BU workflow and prove governed delivery speed.",
-        databricksImplication: "Databricks may keep technical advantage if BU pain is not converted into buyer urgency.",
-        nextBestMove: "Secure BU sponsor and formalize pilot with enterprise governance observers.",
-      },
-      "7d": {
-        keySignals: "Decision governance expanding across business, platform, and risk functions.",
-        whatChanged: "Pilot criteria now include rollout confidence and supportability.",
-        whyItMatters: "Commercial strategy must address both local value and enterprise control.",
-        snowflakeImplication: "Show how one BU win can scale without creating governance debt.",
-        databricksImplication: "Cloud-default pathways can appear safer if expansion story is vague.",
-        nextBestMove: "Present phased land-to-expand path anchored in BU KPI movement.",
-      },
-      "30d": {
-        keySignals: "Evaluation cadence stabilized with formal checkpoints.",
-        whatChanged: "Procurement and risk teams are exerting stronger influence.",
-        whyItMatters: "Deal success depends on operational credibility and risk clarity.",
-        snowflakeImplication: "Lead with predictable deployment and governance-ready operating model.",
-        databricksImplication: "Competitive risk rises if scoring model ignores business workflow outcomes.",
-        nextBestMove: "Shape evaluation rubric around governance + business impact for target workflow.",
-      },
-      "12m": {
-        keySignals: "Roadmap indicates cross-BU standardization opportunity after first measurable success.",
-        whatChanged: "Strategic horizon moved from tactical fixes to platform-level consistency.",
-        whyItMatters: "Large expansion possible if first BU motion becomes enterprise template.",
-        snowflakeImplication: "Design first deployment as blueprint for adjacent BU rollouts.",
-        databricksImplication: "Entrenched technical paths persist without early executive endorsement.",
-        nextBestMove: "Establish executive review cadence linking pilot outcomes to expansion decisions.",
-      },
-    },
-    "t1-05": {
-      "24h": {
-        keySignals: "Transformation stakeholders pushing for practical progress in near-term planning cycle.",
-        whatChanged: "Discussion shifted from vision to executable first motion.",
-        whyItMatters: "Window is open to define the evaluation narrative.",
-        snowflakeImplication: "Lead with governed analytics layer that supports immediate operating decisions.",
-        databricksImplication: "Databricks influence remains high where engineering defaults are unchallenged.",
-        nextBestMove: "Run account planning call to align business outcomes and pilot scope.",
-      },
-      "7d": {
-        keySignals: "Cross-functional teams converging on risk-managed rollout expectations.",
-        whatChanged: "Governance and execution quality became explicit decision criteria.",
-        whyItMatters: "Outcome-led positioning can outweigh pure technical preference.",
-        snowflakeImplication: "Position Snowflake as enterprise-safe acceleration path.",
-        databricksImplication: "Competitive threat is strongest if selection remains team-by-team.",
-        nextBestMove: "Create unified decision brief for business, security, and platform stakeholders.",
-      },
-      "30d": {
-        keySignals: "Procurement and architecture engagement indicates formal buy-cycle progression.",
-        whatChanged: "Evaluation moving from interest to structured comparison.",
-        whyItMatters: "Need clear commercial and governance differentiation now.",
-        snowflakeImplication: "Use workflow-based proof and governance narrative to guide scoring.",
-        databricksImplication: "Cloud co-sell and incumbent familiarity can dominate absent clear business case.",
-        nextBestMove: "Deliver comparative POV focused on business risk, speed, and control.",
-      },
-      "12m": {
-        keySignals: "Longer-term trajectory suggests potential platform standardization across multiple workloads.",
-        whatChanged: "Planning horizon expanded from pilot to operating model durability.",
-        whyItMatters: "Early land design will determine expansion ceiling.",
-        snowflakeImplication: "Architect first deal for repeatable expansion into AI and shared data motions.",
-        databricksImplication: "Default incumbency hardens over time without early executive-level win.",
-        nextBestMove: "Map 12-month expansion sequencing and executive sponsors before launch.",
       },
     },
   }), []);
@@ -370,7 +274,7 @@ export function Overview({
       databricksImplication:
         "Databricks retains default technical momentum where business workflow outcomes are not explicitly tied to the evaluation.",
       recommendedAction:
-        "Run one weekly executive cadence across Tier 1 accounts: confirm sponsor, lock pilot criteria, and pre-wire next expansion workload.",
+        "Run one weekly executive cadence across the three priority accounts: confirm sponsor, lock pilot criteria, and pre-wire next expansion workload.",
     });
     setTerritoryLastUpdated(new Date().toISOString());
     void windows;
@@ -417,34 +321,22 @@ export function Overview({
   }, []);
   const weeklyOperatingPriorities = useMemo(() => [
     {
-      title: "Secure Tier 1 pilot scope and sponsor alignment",
+      title: "Secure pilot scope and sponsor alignment",
       whyNow: "Decision criteria are still being shaped this week.",
-      targetAccount: "Tier 1 Account 01",
+      targetAccount: "U.S. Financial Technology",
       expectedOutcome: "Approved 90-day pilot charter with success metrics.",
     },
     {
       title: "Run consolidation discovery on highest-friction workflow",
       whyNow: "Business pain is now explicit and sponsor-visible.",
-      targetAccount: "Tier 1 Account 02",
+      targetAccount: "Sagent Lending",
       expectedOutcome: "Validated land use case with quantified urgency.",
     },
     {
       title: "Lock governance path for AI-adjacent first deployment",
       whyNow: "Security stakeholders are active early in this cycle.",
-      targetAccount: "Tier 1 Account 03",
+      targetAccount: "Ciena Corp",
       expectedOutcome: "Agreed deployment guardrails and approval path.",
-    },
-    {
-      title: "Convert BU urgency into enterprise-backed pilot motion",
-      whyNow: "BU performance pressure is creating fast executive air cover.",
-      targetAccount: "Tier 1 Account 04",
-      expectedOutcome: "Named BU sponsor and cross-functional deal team.",
-    },
-    {
-      title: "Publish competitive POV before formal vendor scoring",
-      whyNow: "Procurement process is moving from interest to comparison.",
-      targetAccount: "Tier 1 Account 05",
-      expectedOutcome: "Evaluation rubric aligned to governance and business outcomes.",
     },
   ] as const, []);
   const dossierInsights = useMemo(() => {
@@ -591,7 +483,7 @@ export function Overview({
       setActiveDossierId(accountId);
       setActiveDossierTab("Snowflake POV");
       setBriefingOutputTitle(
-        `${territoryPriorityAccounts.find((p) => p.id === accountId)?.name ?? "Tier 1 Account"} · Account POV`
+        `${territoryPriorityAccounts.find((p) => p.id === accountId)?.name ?? "Priority Account"} · Account POV`
       );
       const p = territoryPriorityAccounts.find((priority) => priority.id === accountId) ?? territoryPriorityAccounts[0];
       setBriefingOutput({
@@ -637,7 +529,7 @@ export function Overview({
           subtitle="Operating plan for stepping into the seat and driving early momentum."
         />
         <ul className="mt-3 list-disc space-y-1.5 pl-5 text-[12px] text-text-secondary">
-          <li>Focus first on 4-5 Tier 1 accounts where executive urgency and workload relevance are strongest.</li>
+          <li>Focus first on 3 priority accounts where executive urgency and workload relevance are strongest.</li>
           <li>Land a meaningful first workload tied to a business outcome leaders already measure.</li>
           <li>Expand by multi-threading data, AI, and application stakeholders early in the cycle.</li>
           <li>Use public signals to create timing, relevance, and a sharper first-call POV.</li>
@@ -681,7 +573,7 @@ export function Overview({
           subtitle="Questions I would use to calibrate quickly and prioritize correctly."
         />
         <ul className="mt-3 list-disc space-y-1.5 pl-5 text-[12px] text-text-secondary">
-          <li>Which 4-5 accounts matter most in the next 6 months, not just on paper?</li>
+          <li>Which 3 accounts matter most in the next 6 months, not just on paper?</li>
           <li>Where is Snowflake already in motion versus where are we starting cold?</li>
           <li>In which accounts is Databricks a real competitive threat today?</li>
           <li>Where is there already executive air cover or partner leverage?</li>
@@ -695,8 +587,8 @@ export function Overview({
           subtitle="Immediate operating rhythm for stepping into the patch."
         />
         <ul className="mt-3 list-disc space-y-1.5 pl-5 text-[12px] text-text-secondary">
-          <li>Confirm Tier 1 account priorities with sales leadership and patch context.</li>
-          <li>Build first-pass POVs for each Tier 1 account from public signals and market shifts.</li>
+          <li>Confirm the 3-account priority set with sales leadership and patch context.</li>
+          <li>Build first-pass POVs for each priority account from public signals and market shifts.</li>
           <li>Map likely stakeholder ownership across data, AI, security, and application teams.</li>
           <li>Identify likely competitor footprint and where Databricks is entrenched.</li>
           <li>Prepare first outreach angles anchored in business priorities, not platform features.</li>
@@ -720,7 +612,7 @@ export function Overview({
       <section id="territory-priorities" className="scroll-mt-24 space-y-4">
         <SectionHeader
           title="Territory Priorities"
-          subtitle="Top five priority accounts I would run immediately in this territory."
+          subtitle="Three priority accounts I would run immediately in this territory."
         />
         <div className="grid grid-cols-1 gap-4 xl:grid-cols-2">
           {territoryPriorityAccounts.map((priority) => (
@@ -1072,7 +964,7 @@ export function Overview({
           <article className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
             <p className="text-[11px] font-medium uppercase tracking-[0.1em] text-text-faint">First 30 Days</p>
             <ul className="mt-2 list-disc space-y-1 pl-5 text-[12px] text-text-secondary">
-              <li>Map Tier 1 accounts, active workloads, and executive-level triggers.</li>
+              <li>Map the three priority accounts, active workloads, and executive-level triggers.</li>
               <li>Determine ownership of data, AI, and platform decisions.</li>
               <li>Validate competitor footprint, buying process, and partner influence.</li>
               <li>Publish first-call POVs and next actions for each Tier 1 account.</li>
