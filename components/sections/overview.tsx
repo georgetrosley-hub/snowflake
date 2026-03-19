@@ -167,6 +167,32 @@ export function Overview({
     territoryPriorityAccounts.find((priority) => priority.id === selectedAccountId) ??
     territoryPriorityAccounts[0];
   const activeBriefingAccount = activeDossierAccount;
+  const whatChangedSources: Record<
+    PriorityAccount["id"],
+    Record<"24h" | "7d" | "30d" | "12m", { label: string; href: string }>
+  > = useMemo(
+    () => ({
+      "us-financial-technology": {
+        "24h": { label: "public announcement", href: "https://www.sec.gov/edgar/search/" },
+        "7d": { label: "earnings call", href: "https://www.sec.gov/edgar/search/" },
+        "30d": { label: "10-K", href: "https://www.sec.gov/edgar/search/" },
+        "12m": { label: "public announcement", href: "https://www.sec.gov/edgar/search/" },
+      },
+      "sagent-lending": {
+        "24h": { label: "press release", href: "https://www.google.com/search?q=Sagent+Lending+press+release" },
+        "7d": { label: "public announcement", href: "https://www.google.com/search?q=Sagent+Lending+announcement" },
+        "30d": { label: "job postings", href: "https://www.google.com/search?q=Sagent+Lending+jobs+data+platform" },
+        "12m": { label: "public announcement", href: "https://www.google.com/search?q=Sagent+Lending+news" },
+      },
+      "ciena-corp": {
+        "24h": { label: "press release", href: "https://www.ciena.com/about/newsroom" },
+        "7d": { label: "public announcement", href: "https://www.ciena.com/about/newsroom" },
+        "30d": { label: "earnings call", href: "https://investors.ciena.com/" },
+        "12m": { label: "10-K", href: "https://www.sec.gov/edgar/search/#/entityName=Ciena" },
+      },
+    }),
+    []
+  );
   const briefingByAccount: Record<
     PriorityAccount["id"],
     Record<
@@ -285,6 +311,7 @@ export function Overview({
     },
   }), []);
   const activeBriefing = briefingByAccount[activeBriefingAccount.id][activeBriefingWindow];
+  const activeWhatChangedSource = whatChangedSources[activeBriefingAccount.id][activeBriefingWindow];
   const buildAccountBrief = useCallback(() => {
     setBriefingOutputTitleOverride(`${activeBriefingAccount.name} · ${activeBriefingWindow} Account Brief`);
     setBriefingOutput({
@@ -764,7 +791,17 @@ export function Overview({
           </div>
           <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
             <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">What changed</p>
-            <p className="mt-1.5 text-[12px] text-text-secondary">{activeBriefing.whatChanged}</p>
+            <p className="mt-1.5 text-[12px] text-text-secondary">
+              {activeBriefing.whatChanged}{" "}
+              <a
+                href={activeWhatChangedSource.href}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[11px] text-text-faint underline decoration-text-faint/40 underline-offset-2 hover:text-text-muted"
+              >
+                ({activeWhatChangedSource.label})
+              </a>
+            </p>
           </div>
           <div className="rounded-xl border border-surface-border/50 bg-surface-muted/30 p-3">
             <p className="text-[10px] uppercase tracking-[0.1em] text-text-faint">Why it matters</p>
