@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { BookOpenCheck, RefreshCcw } from "lucide-react";
+import { BookOpenCheck, RefreshCcw, X } from "lucide-react";
 import { SectionHeader } from "@/components/ui/section-header";
 import type {
   Account,
@@ -1475,7 +1475,7 @@ export function Overview({
                 <p><span className="font-semibold text-text-primary">Next Best Move:</span> <span className="text-text-secondary">{priority.nextMove}</span></p>
               </div>
 
-              <div className="mt-4 flex flex-wrap items-center gap-2">
+              <div className="mt-4 flex flex-wrap items-center gap-3">
                 <button
                   type="button"
                   onClick={() => {
@@ -1496,9 +1496,9 @@ export function Overview({
                     setActiveDossierTab("Snowflake POV");
                     window.setTimeout(() => setDiscoverySessionOpen(true), 0);
                   }}
-                  className="rounded-lg border border-surface-border/60 bg-surface-muted/40 px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary transition-colors hover:border-accent/20 hover:text-text-primary"
+                  className="text-[11px] font-medium text-text-muted transition-colors hover:text-accent"
                 >
-                  Run Discovery Session
+                  Prep discovery →
                 </button>
               </div>
               <p className="mt-2 text-[10px] text-text-faint">
@@ -1510,25 +1510,40 @@ export function Overview({
       </section>
 
       {discoverySessionOpen && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 sm:p-6">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6"
+          onClick={(e) => e.target === e.currentTarget && setDiscoverySessionOpen(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="discovery-session-title"
+        >
+          <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" aria-hidden />
           <section
             id="live-discovery-lab"
-            className="relative w-full max-w-6xl max-h-[90vh] scroll-mt-24 overflow-y-auto rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6"
+            className="relative z-10 w-full max-w-4xl max-h-[88vh] overflow-y-auto rounded-2xl border border-surface-border/60 bg-surface shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
           >
-            <button
-              type="button"
-              onClick={() => setDiscoverySessionOpen(false)}
-              className="absolute right-4 top-4 rounded-lg border border-surface-border/60 bg-surface-muted/40 px-3 py-1.5 text-[11px] font-medium uppercase tracking-[0.08em] text-text-secondary transition-colors hover:border-accent/20 hover:text-text-primary"
-            >
-              Close
-            </button>
+            <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-surface-border/50 bg-surface px-5 py-4">
+              <div>
+                <h2 id="discovery-session-title" className="text-[15px] font-semibold tracking-tight text-text-primary">
+                  Discovery Session
+                </h2>
+                <p className="mt-0.5 text-[12px] text-text-muted">
+                  {activeDossierAccount.name} · Account → Discover → Decide → Act
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setDiscoverySessionOpen(false)}
+                className="shrink-0 rounded-lg p-2 text-text-muted transition-colors hover:bg-surface-muted/60 hover:text-text-primary"
+                aria-label="Close"
+              >
+                <X className="h-4 w-4" strokeWidth={2} />
+              </button>
+            </div>
 
-            <SectionHeader
-              title="Discovery Session"
-              subtitle="Account -> Discover -> Decide -> Act. A call guide tied to the selected Snowflake account."
-            />
-
-        <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <div className="max-h-[calc(100vh-5rem)] overflow-y-auto p-5 sm:p-6">
+              <div className="mt-4 grid grid-cols-1 gap-4 lg:grid-cols-2">
           <details className="rounded-xl border border-surface-border/50 bg-surface-muted/20 p-3">
             <summary className="cursor-pointer list-none text-[10px] uppercase tracking-[0.1em] text-text-faint">
               Tune call guide (scenario + persona)
@@ -1970,9 +1985,9 @@ export function Overview({
               setActiveDossierTab("Snowflake POV");
               setDiscoverySessionOpen(true);
             }}
-            className="rounded-lg border border-accent/30 bg-accent/[0.08] px-3 py-2 text-[11px] font-medium uppercase tracking-[0.08em] text-accent transition-colors hover:bg-accent/[0.14]"
+            className="text-[11px] font-medium text-text-muted transition-colors hover:text-accent"
           >
-            Run Discovery Session
+            Prep discovery →
           </button>
           <button
             type="button"
