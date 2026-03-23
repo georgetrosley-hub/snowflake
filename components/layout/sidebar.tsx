@@ -11,26 +11,20 @@ import {
   PanelLeftOpen,
   X,
   Newspaper,
-  FileText,
   ClipboardCheck,
   BookOpenCheck,
-  TrendingUp,
-  Search,
 } from "lucide-react";
 
 const SNOWFLAKE_SUMMIT_URL = "https://www.snowflake.com/en/summit/";
 
 const sectionGroups = [
   {
-    label: "Field Execution",
+    label: "Territory OS",
     items: [
       { id: "overview", label: "Overview", icon: LayoutDashboard },
+      { id: "thisWeeksPriorities", label: "This Week's Priorities", icon: Newspaper },
       { id: "priorityAccounts", label: "Priority Accounts", icon: Target },
-      { id: "accountBrief", label: "Account Brief", icon: FileText },
-      { id: "discoveryPrep", label: "Discovery Prep", icon: Search },
       { id: "povPlan", label: "POV Plan", icon: BookOpenCheck },
-      { id: "expansionPath", label: "Expansion Path", icon: TrendingUp },
-      { id: "weeklyBriefing", label: "Weekly Briefing", icon: Newspaper },
       { id: "recentSignals", label: "Recent Signals", icon: ClipboardCheck },
     ],
   },
@@ -86,7 +80,7 @@ function SidebarBody({
               <div>
                 <SnowflakeWordmark />
                 <p className="text-[11px] text-text-muted">
-                  Field Execution
+                  Territory OS
                 </p>
               </div>
             )}
@@ -200,7 +194,7 @@ function SidebarBody({
           {!compact && (
             <div className="min-w-0">
               <p className="truncate text-[12px] font-medium text-text-secondary">Enterprise AE</p>
-              <p className="text-[10px] text-text-faint">Strategic accounts · Expansion</p>
+              <p className="text-[10px] text-text-faint">Strategic accounts · Expansion execution</p>
             </div>
           )}
         </div>
@@ -216,8 +210,8 @@ function SidebarBody({
           >
             Snowflake Summit →
           </a>
-          <p className="text-[10px] text-text-faint/60">
-            Internal use · snowflake.com
+              <p className="text-[10px] text-text-faint/60">
+            Internal · snowflake.com
           </p>
         </div>
       )}

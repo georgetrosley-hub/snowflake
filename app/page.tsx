@@ -10,12 +10,9 @@ import { Overview } from "@/components/sections/overview";
 
 const ORDERED_SECTIONS: ReadonlyArray<{ sectionId: SectionId; anchorId: string }> = [
   { sectionId: "overview", anchorId: "overview" },
+  { sectionId: "thisWeeksPriorities", anchorId: "this-weeks-priorities" },
   { sectionId: "priorityAccounts", anchorId: "priority-accounts" },
-  { sectionId: "accountBrief", anchorId: "account-brief" },
-  { sectionId: "discoveryPrep", anchorId: "discovery-prep" },
   { sectionId: "povPlan", anchorId: "pov-plan" },
-  { sectionId: "expansionPath", anchorId: "expansion-path" },
-  { sectionId: "weeklyBriefing", anchorId: "weekly-briefing" },
   { sectionId: "recentSignals", anchorId: "recent-signals" },
 ] as const;
 const ACTIVATION_OFFSET_PX = 120;
@@ -23,6 +20,7 @@ const ACTIVATION_OFFSET_PX = 120;
 function MainContent() {
   const [activeSection, setActiveSection] = useState<SectionId>("overview");
   const [chatOpen, setChatOpen] = useState(false);
+  const [strategyPrompt, setStrategyPrompt] = useState<string | null>(null);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -41,8 +39,19 @@ function MainContent() {
   };
 
   const handleOpenChat = () => {
+    setStrategyPrompt(null);
     setChatOpen(true);
     setMobileNavOpen(false);
+  };
+
+  const handleOpenChatWithPrompt = (prompt: string) => {
+    setStrategyPrompt(prompt);
+    setChatOpen(true);
+    setMobileNavOpen(false);
+  };
+
+  const handleStrategyPromptConsumed = () => {
+    setStrategyPrompt(null);
   };
 
   const handleAccountChange = (accountId: string) => {
@@ -57,6 +66,7 @@ function MainContent() {
       account={account}
       onSelectAccount={handleAccountChange}
       onOpenStrategy={handleOpenChat}
+      onOpenStrategyWithPrompt={handleOpenChatWithPrompt}
     />
   );
 
@@ -178,7 +188,7 @@ function MainContent() {
           ref={mainScrollRef as unknown as React.RefObject<HTMLElement>}
           className="relative flex-1 overflow-y-auto overflow-x-hidden px-6 py-8 sm:px-8 sm:py-10 lg:px-12 lg:py-12 xl:px-16 xl:py-14"
         >
-          <div className="mx-auto w-full max-w-5xl min-w-0">{overviewNode}</div>
+          <div className="mx-auto w-full max-w-6xl min-w-0">{overviewNode}</div>
         </main>
       </div>
 
@@ -188,6 +198,8 @@ function MainContent() {
         account={account}
         competitors={competitors}
         activeSection={activeSection}
+        pendingUserMessage={strategyPrompt}
+        onPendingUserMessageConsumed={handleStrategyPromptConsumed}
       />
     </div>
   );

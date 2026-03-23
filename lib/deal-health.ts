@@ -62,10 +62,10 @@ export function getDealHealth(
       label: "Needs attention",
       reason:
         blockedCount >= 1
-          ? "1+ blocker to resolve"
+          ? "Blocker to resolve"
           : !hasRecentUpdate
-            ? "No recent account update"
-            : "Champion coverage could be stronger",
+            ? "No recent activity"
+            : "Champion coverage light",
     };
   }
 

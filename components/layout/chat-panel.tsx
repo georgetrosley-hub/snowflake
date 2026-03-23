@@ -22,6 +22,9 @@ interface ChatPanelProps {
   account: Account;
   competitors: Competitor[];
   activeSection: string;
+  /** When set, opens Strategy with this user message and streams the reply (POV Plan, etc.) */
+  pendingUserMessage?: string | null;
+  onPendingUserMessageConsumed?: () => void;
 }
 
 export function ChatPanel({
@@ -30,6 +33,8 @@ export function ChatPanel({
   account,
   competitors,
   activeSection,
+  pendingUserMessage,
+  onPendingUserMessageConsumed,
 }: ChatPanelProps) {
   const { hasApiKey, getRequestHeaders } = useApiKey();
   const [messages, setMessages] = useState<Message[]>([]);
@@ -52,92 +57,111 @@ export function ChatPanel({
     }
   }, [messages, streamingContent]);
 
+  const streamReply = useCallback(
+    async (newMessages: Message[]) => {
+      if (isStreaming) return;
+
+      setMessages(newMessages);
+      setIsStreaming(true);
+      setStreamingContent("");
+
+      const controller = new AbortController();
+      abortRef.current = controller;
+      let fullText = "";
+
+      try {
+        const response = await fetch("/api/chat", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...getRequestHeaders(),
+          },
+          body: JSON.stringify({
+            messages: newMessages,
+            account,
+            competitors,
+            section: activeSection,
+          }),
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(await readApiErrorMessage(response));
+        }
+        const reader = response.body?.getReader();
+        if (!reader) throw new Error("No reader");
+
+        const decoder = new TextDecoder();
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const chunk = decoder.decode(value, { stream: true });
+          const lines = chunk.split("\n");
+
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              const data = line.slice(6);
+              if (data === "[DONE]") continue;
+              try {
+                const parsed = JSON.parse(data);
+                if (parsed.text) {
+                  fullText += parsed.text;
+                  setStreamingContent(fullText);
+                }
+              } catch {
+                // skip
+              }
+            }
+          }
+        }
+
+        setMessages((prev) => [...prev, { role: "assistant", content: fullText }]);
+        setStreamingContent("");
+      } catch (error) {
+        if ((error as Error).name !== "AbortError") {
+          setMessages((prev) => [
+            ...prev,
+            {
+              role: "assistant",
+              content:
+                error instanceof Error
+                  ? error.message
+                  : "Add API key to enable Strategy.",
+            },
+          ]);
+        }
+      } finally {
+        setIsStreaming(false);
+        abortRef.current = null;
+      }
+    },
+    [isStreaming, account, competitors, activeSection, getRequestHeaders]
+  );
+
   const sendMessage = useCallback(async () => {
     const trimmed = input.trim();
     if (!trimmed || isStreaming) return;
 
     const userMessage: Message = { role: "user", content: trimmed };
     const newMessages = [...messages, userMessage];
-    setMessages(newMessages);
     setInput("");
-    setIsStreaming(true);
-    setStreamingContent("");
+    await streamReply(newMessages);
+  }, [input, messages, isStreaming, streamReply]);
 
-    const controller = new AbortController();
-    abortRef.current = controller;
-    let fullText = "";
-
-    try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...getRequestHeaders(),
-        },
-        body: JSON.stringify({
-          messages: newMessages,
-          account,
-          competitors,
-          section: activeSection,
-        }),
-        signal: controller.signal,
+  useEffect(() => {
+    if (!isOpen || !pendingUserMessage?.trim()) return;
+    const content = pendingUserMessage.trim();
+    onPendingUserMessageConsumed?.();
+    setMessages((prev) => {
+      const next = [...prev, { role: "user" as const, content }];
+      queueMicrotask(() => {
+        void streamReply(next);
       });
-
-      if (!response.ok) {
-        throw new Error(await readApiErrorMessage(response));
-      }
-      const reader = response.body?.getReader();
-      if (!reader) throw new Error("No reader");
-
-      const decoder = new TextDecoder();
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        const chunk = decoder.decode(value, { stream: true });
-        const lines = chunk.split("\n");
-
-        for (const line of lines) {
-          if (line.startsWith("data: ")) {
-            const data = line.slice(6);
-            if (data === "[DONE]") continue;
-            try {
-              const parsed = JSON.parse(data);
-              if (parsed.text) {
-                fullText += parsed.text;
-                setStreamingContent(fullText);
-              }
-            } catch {
-              // skip
-            }
-          }
-        }
-      }
-
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: fullText },
-      ]);
-      setStreamingContent("");
-    } catch (error) {
-      if ((error as Error).name !== "AbortError") {
-        setMessages((prev) => [
-          ...prev,
-          {
-            role: "assistant",
-                content:
-              error instanceof Error
-                ? error.message
-                : "I couldn't process that request. Add your API key in the top right and try again.",
-          },
-        ]);
-      }
-    } finally {
-      setIsStreaming(false);
-      abortRef.current = null;
-    }
-  }, [input, messages, isStreaming, account, competitors, activeSection, getRequestHeaders]);
+      return next;
+    });
+  }, [isOpen, pendingUserMessage, onPendingUserMessageConsumed, streamReply]);
 
   const stopStreaming = useCallback(() => {
     abortRef.current?.abort();
@@ -220,7 +244,7 @@ export function ChatPanel({
               <div className="flex min-w-0 items-center gap-2">
                 <SnowflakeLogoIcon size={20} />
                 <span className="truncate text-[13px] font-medium text-text-primary">
-                  Snowflake
+                  Strategy
                 </span>
                 <span className="hidden rounded-full bg-surface-muted/60 px-2 py-0.5 text-[10px] text-text-muted sm:inline-flex">
                   {account.name}
@@ -259,26 +283,28 @@ export function ChatPanel({
                     className="mb-4 opacity-90"
                   />
                   <p className="text-[15px] font-semibold text-text-primary mb-1">
-                    Snowflake GTM
+                    Strategy
                   </p>
                   <p className="text-[13px] text-text-muted leading-relaxed mb-6">
-                    {account.id === "na" ? "Ask me anything about the AI Data Cloud, platform narrative, or deal playbooks." : `Ask me anything about ${account.name}. I have full context on this deal.`}
+                    {account.id === "na"
+                      ? "Account-specific discovery, POV, and expansion plays."
+                      : `Strategy for ${account.name}. Discovery, POV, expansion.`}
                   </p>
                   {!hasApiKey && (
                     <div className="mb-6 rounded-lg border border-accent/20 bg-accent/[0.06] px-3 py-2 text-[11px] text-accent/90">
-                      Add your API key from the top right to start the conversation.
+                      Add API key to enable Strategy.
                     </div>
                   )}
                   <p className="text-[10px] font-medium uppercase tracking-wider text-text-faint mb-2">
-                    Try asking:
+                    Suggested prompts:
                   </p>
                   <div className="space-y-2 w-full">
                     {[
-                      `How would you land ${account.name}?`,
-                      `Who is the likely champion at ${account.name}?`,
-                      "What objections will legal raise?",
-                      "What is the fastest pilot path?",
-                      "How would you handle security and procurement?",
+                      `Land strategy for ${account.name}`,
+                      `Champion map for ${account.name}`,
+                      "Legal and security objections",
+                      "Fastest pilot path",
+                      "Procurement and governance path",
                     ].map((suggestion) => (
                       <button
                         key={suggestion}
@@ -381,7 +407,7 @@ export function ChatPanel({
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder={`Ask about ${account.name}...`}
+                  placeholder={`Strategy for ${account.name}...`}
                   rows={1}
                   className="flex-1 resize-none rounded-lg border border-surface-border/50 bg-surface-elevated/40 px-3 py-2.5 text-[13px] text-text-primary placeholder:text-text-muted/60 focus:border-accent/30 focus:outline-none focus:ring-0 transition-colors"
                   style={{

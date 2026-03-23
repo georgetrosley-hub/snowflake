@@ -60,135 +60,108 @@ export function StatusBar({
 
   return (
     <>
-      <header className="shrink-0 border-b border-surface-border/35 bg-surface/40 px-4 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-6">
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
-              <button
-                type="button"
-                onClick={onOpenMobileNav}
-                className="touch-target inline-flex h-10 w-10 min-h-[44px] min-w-[44px] items-center justify-center rounded-md border border-surface-border/50 bg-surface-elevated/35 text-text-secondary transition-colors active:bg-surface-muted/30 hover:bg-surface-muted/30 hover:text-text-primary lg:hidden"
-                aria-label="Open navigation"
-              >
-                <Menu className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                onClick={onToggleSidebar}
-                className="hidden h-9 w-9 items-center justify-center rounded-md border border-surface-border/50 bg-surface-elevated/35 text-text-secondary transition-colors hover:bg-surface-muted/30 hover:text-text-primary lg:inline-flex"
-                aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-                title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-              >
-                {sidebarCollapsed ? (
-                  <PanelLeftOpen className="h-4 w-4" />
-                ) : (
-                  <PanelLeftClose className="h-4 w-4" />
-                )}
-              </button>
+      <header className="shrink-0 border-b border-surface-border/30 bg-surface/95 backdrop-blur-sm px-5 py-3 pt-[max(0.75rem,env(safe-area-inset-top))] sm:px-8">
+        <div className="flex items-center justify-between gap-4">
+          <div className="flex min-w-0 items-center gap-4">
+            <button
+              type="button"
+              onClick={onOpenMobileNav}
+              className="touch-target inline-flex h-9 w-9 min-h-[40px] min-w-[40px] items-center justify-center rounded text-text-muted transition-colors hover:bg-surface-muted/40 hover:text-text-primary lg:hidden"
+              aria-label="Open navigation"
+            >
+              <Menu className="h-4 w-4" />
+            </button>
+            <button
+              type="button"
+              onClick={onToggleSidebar}
+              className="hidden h-8 w-8 items-center justify-center rounded text-text-muted transition-colors hover:bg-surface-muted/40 hover:text-text-primary lg:inline-flex"
+              aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+              title={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            >
+              {sidebarCollapsed ? (
+                <PanelLeftOpen className="h-4 w-4" />
+              ) : (
+                <PanelLeftClose className="h-4 w-4" />
+              )}
+            </button>
 
-              <div className="relative min-w-0 flex-1 sm:flex-none">
-                <select
-                  value={account.id}
-                  onChange={(e) => onAccountChange(e.target.value)}
-                  className={cn(
-                    "w-full max-w-full appearance-none rounded bg-transparent py-1.5 pr-7 text-[13px] text-text-primary",
-                    "cursor-pointer border-none focus:outline-none focus:ring-0 sm:min-w-[180px]"
-                  )}
-                >
-                  {accounts.map((a) => (
-                    <option key={a.id} value={a.id} className="bg-surface-elevated text-text-primary">
-                      {a.name}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown className="pointer-events-none absolute right-0 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-text-muted" />
-              </div>
-              <div className="flex shrink-0 items-center gap-1.5 rounded-md border border-surface-border/40 bg-surface-elevated/30 px-2.5 py-1.5">
-                <span className="text-[10px] font-medium uppercase tracking-wider text-text-faint">Account</span>
-                <span className="tabular-nums text-[13px] font-semibold text-accent">
-                  {account.name}
-                </span>
+            <div className="flex items-center gap-3">
+              <SnowflakeLogoIcon size={22} className="shrink-0 opacity-90" />
+              <div className="hidden sm:block">
+                <span className="font-semibold text-[13px] text-text-primary tracking-tight">Territory OS</span>
+                <span className="ml-2 text-[11px] text-text-faint">Enterprise AE</span>
               </div>
             </div>
 
-            <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="flex h-9 w-9 items-center justify-center rounded-md border border-surface-border/50 bg-surface-elevated/35 text-text-muted transition-colors hover:bg-surface-muted/30 hover:text-text-primary"
-                aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-                title={theme === "dark" ? "Light mode" : "Dark mode"}
+            <div className="h-4 w-px bg-surface-border/50" />
+
+            <div className="relative hidden min-w-[160px] sm:block">
+              <select
+                value={account.id}
+                onChange={(e) => onAccountChange(e.target.value)}
+                className="w-full appearance-none rounded bg-transparent py-1.5 pr-6 text-[12px] text-text-secondary cursor-pointer border-none focus:outline-none focus:ring-0 hover:text-text-primary transition-colors"
               >
-                {theme === "dark" ? (
-                  <Sun className="h-4 w-4" />
-                ) : (
-                  <Moon className="h-4 w-4" />
-                )}
-              </button>
-              <button
-                type="button"
-                onClick={() => setIsApiKeyOpen(true)}
-                className={cn(
-                  "flex items-center gap-1.5 rounded-md border px-2.5 py-1 text-[11px] transition-colors",
-                  hasApiKey
-                    ? "border-accent/25 bg-accent/[0.06] text-accent/90 hover:bg-accent/10"
-                    : "border-surface-border/50 bg-surface-elevated/30 text-text-secondary hover:text-text-primary"
-                )}
-              >
-                <KeyRound className="h-3 w-3" />
-                <span className="hidden sm:inline">
-                  {isReady && hasApiKey ? "AI ready" : "Add key"}
-                </span>
-              </button>
-              {onOpenChat && (
-                <button
-                  onClick={onOpenChat}
-                  className="flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] text-text-secondary transition-colors hover:bg-surface-muted/30 hover:text-text-primary"
-                >
-                  <MessageCircle className="h-3 w-3" />
-                  <span className="hidden sm:inline">Strategy</span>
-                </button>
-              )}
-              <div className="flex items-center gap-2 text-[11px]">
-                {oversightStatus === "active" ? (
-                  <>
-                    <span className="relative flex h-2 w-2">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent/40" />
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-accent/70" />
-                    </span>
-                    <span className="hidden text-accent/80 sm:inline">
-                      {pendingDecisions} action{pendingDecisions === 1 ? "" : "s"} pending
-                    </span>
-                  </>
-                ) : (
-                  <>
-                    <SnowflakeLogoIcon size={14} className="opacity-70" />
-                    <span className="hidden text-[11px] text-text-faint sm:inline">In sync</span>
-                  </>
-                )}
-              </div>
+                {accounts.map((a) => (
+                  <option key={a.id} value={a.id} className="bg-surface-elevated text-text-primary">
+                    {a.name}
+                  </option>
+                ))}
+              </select>
+              <ChevronDown className="pointer-events-none absolute right-0 top-1/2 h-3 w-3 -translate-y-1/2 text-text-faint" />
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] sm:text-[12px]">
+          <div className="flex items-center gap-2">
+            {oversightStatus === "active" && (
+              <span className="hidden items-center gap-1.5 rounded bg-accent/10 px-2 py-1 text-[11px] font-medium text-accent sm:inline-flex">
+                <span className="h-1.5 w-1.5 rounded-full bg-accent" />
+                {pendingDecisions} pending
+              </span>
+            )}
             {dealHealth && (
               <span
-                className={`font-medium ${
+                className={`hidden rounded px-2 py-1 text-[10px] font-medium sm:inline-block ${
                   dealHealth.status === "healthy"
-                    ? "text-emerald-400/90"
+                    ? "bg-emerald-500/10 text-emerald-400/90"
                     : dealHealth.status === "attention"
-                      ? "text-accent/90"
-                      : "text-rose-400/90"
+                      ? "bg-accent/10 text-accent/90"
+                      : "bg-rose-500/10 text-rose-400/90"
                 }`}
                 title={dealHealth.reason}
               >
                 {dealHealth.label}
               </span>
             )}
-            <span className="text-text-muted">
-              Public intel only. Validate consumption and footprint post-onboarding.
-            </span>
-            <span className="text-text-muted">{signalCount > 0 ? `${signalCount} signal${signalCount === 1 ? "" : "s"}` : "No signals yet"}</span>
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="flex h-8 w-8 items-center justify-center rounded text-text-muted transition-colors hover:bg-surface-muted/40 hover:text-text-primary"
+              aria-label={theme === "dark" ? "Light mode" : "Dark mode"}
+            >
+              {theme === "dark" ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsApiKeyOpen(true)}
+              className={cn(
+                "flex items-center gap-1.5 rounded px-2 py-1.5 text-[11px] transition-colors",
+                hasApiKey
+                  ? "text-accent/90 hover:bg-accent/10"
+                  : "text-text-muted hover:bg-surface-muted/40 hover:text-text-secondary"
+              )}
+            >
+              <KeyRound className="h-3 w-3" />
+              <span className="hidden sm:inline">{isReady && hasApiKey ? "AI" : "API"}</span>
+            </button>
+            {onOpenChat && (
+              <button
+                onClick={onOpenChat}
+                className="flex items-center gap-1.5 rounded bg-accent/15 px-3 py-1.5 text-[11px] font-medium text-accent transition-colors hover:bg-accent/25"
+              >
+                <MessageCircle className="h-3 w-3" strokeWidth={2} />
+                Strategy
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -202,7 +175,7 @@ export function StatusBar({
                 <div>
                   <p className="text-[13px] font-medium text-text-primary">API Key</p>
                   <p className="mt-1 text-[11px] text-text-muted">
-                    Enable AI-assisted strategy for this account.
+                    Required for Strategy panel.
                   </p>
                 </div>
               </div>
@@ -232,9 +205,7 @@ export function StatusBar({
               </div>
 
               <div className="rounded-lg bg-surface/60 px-3 py-2 text-[11px] text-text-secondary">
-                {hasApiKey
-                  ? "Key saved. Strategy panel ready."
-                  : "Add key to enable AI-assisted execution."}
+                {hasApiKey ? "Saved. Strategy ready." : "Add key to enable Strategy."}
               </div>
 
               <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -247,7 +218,7 @@ export function StatusBar({
                   className="flex items-center gap-1.5 rounded-md px-2 py-1.5 text-[11px] text-text-muted hover:bg-surface-muted/30 hover:text-text-secondary transition-colors"
                 >
                   <Trash2 className="h-3 w-3" />
-                  Clear saved key
+                  Clear key
                 </button>
                 <div className="flex items-center justify-end gap-2">
                   <button
@@ -271,7 +242,7 @@ export function StatusBar({
                         : "bg-surface-muted/50 text-text-muted"
                     )}
                   >
-                    Save key
+                    Save
                   </button>
                 </div>
               </div>

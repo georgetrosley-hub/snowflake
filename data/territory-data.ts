@@ -23,6 +23,12 @@ export interface PriorityAccount {
   /** Pivot if wedge doesn't land */
   pivotIfNeeded: string;
   lastTouch: string;
+  /** Current motion - what we're executing now */
+  currentMotion: string;
+  /** Competitive context - 2 concise bullets */
+  competitiveContext: string[];
+  /** Expansion path after first workload lands */
+  expansionPathSteps: string[];
 }
 
 export const priorityAccounts: PriorityAccount[] = [
@@ -43,6 +49,12 @@ export const priorityAccounts: PriorityAccount[] = [
     proofPoint: "Surface real-time anomaly vs delayed reporting",
     pivotIfNeeded: "Stakeholder reporting latency",
     lastTouch: "2025-03-12",
+    currentMotion: "SE alignment on anomaly workload; data platform leadership intro",
+    competitiveContext: [
+      "Databricks in analytics silos; governance gaps create Snowflake wedge.",
+      "Regulatory pressure favors governed platform with lineage.",
+    ],
+    expansionPathSteps: ["Initial Workload", "Early Adoption", "Platform Trust", "Expanded Consumption"],
   },
   {
     id: "sagent-lending",
@@ -61,6 +73,12 @@ export const priorityAccounts: PriorityAccount[] = [
     proofPoint: "Identify 1–2 underperforming Dara deployments",
     pivotIfNeeded: "Borrower-level intelligence",
     lastTouch: "2025-03-15",
+    currentMotion: "Discovery prep—Dara deployment risk; CS follow-up on timelines",
+    competitiveContext: [
+      "Dara rollout creates urgency; ops teams need governed data layer.",
+      "Board expects measurable outcomes—tie wedge to customer risk reduction.",
+    ],
+    expansionPathSteps: ["Initial Workload", "Early Adoption", "Platform Trust", "Expanded Consumption"],
   },
   {
     id: "ciena-corp",
@@ -79,6 +97,12 @@ export const priorityAccounts: PriorityAccount[] = [
     proofPoint: "Show backlog risk on 2–3 AI deals within 24 hours",
     pivotIfNeeded: "Supply chain constraint visibility",
     lastTouch: "2025-03-18",
+    currentMotion: "CFO outreach—backlog risk; AI deal list from FP&A",
+    competitiveContext: [
+      "AI demand outstrips execution; forecast accuracy pressure from Street.",
+      "Fragmented tools; Snowflake unifies order-to-fulfillment visibility.",
+    ],
+    expansionPathSteps: ["Initial Workload", "Early Adoption", "Platform Trust", "Expanded Consumption"],
   },
 ];
 
