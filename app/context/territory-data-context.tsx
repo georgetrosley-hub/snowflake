@@ -43,20 +43,23 @@ function saveJson(key: string, value: unknown) {
 }
 
 export function TerritoryDataProvider({ children }: { children: React.ReactNode }) {
-  const [activities, setActivities] = useState<ActivityItem[]>(() =>
-    loadJson(STORAGE_KEY_ACTIVITIES, defaultActivities)
-  );
-  const [signals, setSignals] = useState<SignalItem[]>(() =>
-    loadJson(STORAGE_KEY_SIGNALS, defaultSignals)
-  );
+  const [activities, setActivities] = useState<ActivityItem[]>(defaultActivities);
+  const [signals, setSignals] = useState<SignalItem[]>(defaultSignals);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    saveJson(STORAGE_KEY_ACTIVITIES, activities);
-  }, [activities]);
+    setActivities(loadJson(STORAGE_KEY_ACTIVITIES, defaultActivities));
+    setSignals(loadJson(STORAGE_KEY_SIGNALS, defaultSignals));
+    setHydrated(true);
+  }, []);
 
   useEffect(() => {
-    saveJson(STORAGE_KEY_SIGNALS, signals);
-  }, [signals]);
+    if (hydrated) saveJson(STORAGE_KEY_ACTIVITIES, activities);
+  }, [activities, hydrated]);
+
+  useEffect(() => {
+    if (hydrated) saveJson(STORAGE_KEY_SIGNALS, signals);
+  }, [signals, hydrated]);
 
   const addActivity = useCallback((account: string, text: string) => {
     const trimmed = text.trim();
