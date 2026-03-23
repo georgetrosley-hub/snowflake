@@ -15,7 +15,6 @@ import {
   ClipboardCheck,
   Compass,
   BookOpenCheck,
-  Search,
   TrendingUp,
 } from "lucide-react";
 
@@ -28,7 +27,6 @@ const sectionGroups = [
       { id: "overview", label: "Overview", icon: LayoutDashboard },
       { id: "priorityAccounts", label: "Priority Accounts", icon: Target },
       { id: "accountBrief", label: "Account Brief", icon: FileText },
-      { id: "discoveryPrep", label: "Discovery Prep", icon: Search },
       { id: "povPlan", label: "POV Plan", icon: BookOpenCheck },
       { id: "expansionPath", label: "Expansion Path", icon: TrendingUp },
       { id: "weeklyBriefing", label: "Weekly Briefing", icon: Newspaper },

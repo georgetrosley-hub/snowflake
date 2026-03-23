@@ -139,22 +139,6 @@ export function Overview({
     return base;
   }, [briefingWindow, selectedAccount.nextAction]);
 
-  const discoveryPrep = useMemo(
-    () => ({
-      angles: [
-        "Where does delayed data-to-decision flow create highest business cost?",
-        "What governance blockers slow deployment confidence?",
-        "Which 90-day result justifies expansion sponsorship?",
-      ],
-      talkTracks: [
-        "We can improve delivery speed without trading away governance.",
-        "Start with one workflow leadership cares about and prove value fast.",
-        "This is a territory execution decision, not a tooling debate.",
-      ],
-    }),
-    []
-  );
-
   const expansionSequence = ["Initial Workload", "Early Adoption", "Platform Trust", "Expanded Consumption"];
   const filteredWeekItems = useMemo(
     () => next7Days.filter((item) => item.account === account.id),
@@ -236,30 +220,7 @@ export function Overview({
         </div>
       </section>
 
-      {/* SECTION 4: DISCOVERY PREP */}
-      <section id="discovery-prep" className="scroll-mt-24 rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
-        <SectionHeader title="Discovery Prep" subtitle="Angles and talk tracks for qualification calls" />
-        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div>
-            <p className="text-[11px] font-medium uppercase text-text-faint">Discovery angles</p>
-            <ul className="mt-2 space-y-1.5 text-[12px] text-text-secondary">
-              {discoveryPrep.angles.map((a) => (
-                <li key={a}>• {a}</li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <p className="text-[11px] font-medium uppercase text-text-faint">Talk tracks</p>
-            <ul className="mt-2 space-y-1.5 text-[12px] text-text-secondary">
-              {discoveryPrep.talkTracks.map((t) => (
-                <li key={t}>• {t}</li>
-              ))}
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* SECTION 5: POV PLAN */}
+      {/* SECTION 4: POV PLAN */}
       <section id="pov-plan" className="scroll-mt-24 rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
         <SectionHeader title="POV Plan" subtitle="Hypothesis-led positioning vs Databricks" />
         <div className="mt-4 space-y-3">
@@ -284,7 +245,7 @@ export function Overview({
         </div>
       </section>
 
-      {/* SECTION 6: EXPANSION PATH */}
+      {/* SECTION 5: EXPANSION PATH */}
       <section id="expansion-path" className="scroll-mt-24 rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
         <SectionHeader title="Expansion Path" subtitle={`${selectedAccount.name} — Land → prove → expand`} />
         <div className="mt-4 flex flex-wrap gap-2">
@@ -305,7 +266,7 @@ export function Overview({
         </div>
       </section>
 
-      {/* SECTION 7: WEEKLY BRIEFING */}
+      {/* SECTION 6: WEEKLY BRIEFING */}
       <section id="weekly-briefing" className="scroll-mt-24 rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
         <SectionHeader title="Weekly Briefing" subtitle={`${selectedAccount.name} — This week's priorities`} />
         <ul className="mt-4 space-y-2">
@@ -327,7 +288,7 @@ export function Overview({
         </ul>
       </section>
 
-      {/* SECTION 8: SIGNALS & ACTIVITY */}
+      {/* SECTION 7: SIGNALS & ACTIVITY */}
       <section id="signals-activity" className="scroll-mt-24 space-y-4">
         <SectionHeader title="Signals & Activity" subtitle={`${selectedAccount.name} — Curated news, outreach log`} />
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

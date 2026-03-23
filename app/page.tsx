@@ -12,7 +12,6 @@ const ORDERED_SECTIONS: ReadonlyArray<{ sectionId: SectionId; anchorId: string }
   { sectionId: "overview", anchorId: "overview" },
   { sectionId: "priorityAccounts", anchorId: "priority-accounts" },
   { sectionId: "accountBrief", anchorId: "account-brief" },
-  { sectionId: "discoveryPrep", anchorId: "discovery-prep" },
   { sectionId: "povPlan", anchorId: "pov-plan" },
   { sectionId: "expansionPath", anchorId: "expansion-path" },
   { sectionId: "weeklyBriefing", anchorId: "weekly-briefing" },
