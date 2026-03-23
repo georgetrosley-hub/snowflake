@@ -5,6 +5,7 @@ import { SectionHeader } from "@/components/ui/section-header";
 import { useTerritoryData } from "@/app/context/territory-data-context";
 import type { PriorityAccount } from "@/data/territory-data";
 import { AccountExecutionPanel } from "@/components/sections/account-execution-panel";
+import { PovPlanModule } from "@/components/sections/pov-plan-module";
 import { cn } from "@/lib/utils";
 
 function accountDisplayName(id: string): string {
@@ -84,9 +85,13 @@ function AccountDetailCard({ account }: { account: PriorityAccount }) {
 export function Overview({
   account,
   onSelectAccount,
+  onOpenStrategy,
+  onOpenStrategyWithPrompt,
 }: {
   account: { id: string };
   onSelectAccount: (id: string) => void;
+  onOpenStrategy?: () => void;
+  onOpenStrategyWithPrompt?: (prompt: string) => void;
 }) {
   const { priorityAccounts, next7Days, activities, signals, addActivity, addSignal } =
     useTerritoryData();
@@ -164,6 +169,15 @@ export function Overview({
         <p className="mt-2 text-[11px] text-text-faint">
           Built with public information. Validate consumption, opportunities, and competitive footprint post-onboarding.
         </p>
+        {onOpenStrategy && (
+          <button
+            type="button"
+            onClick={onOpenStrategy}
+            className="mt-4 rounded-lg border border-accent/30 bg-accent/10 px-4 py-2 text-[12px] font-medium text-accent transition-colors hover:bg-accent/20"
+          >
+            Open Strategy
+          </button>
+        )}
       </section>
 
       <AccountExecutionPanel />
@@ -246,29 +260,36 @@ export function Overview({
         </div>
       </section>
 
-      <section id="pov-plan" className="scroll-mt-24 rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
-        <SectionHeader title="POV Plan" subtitle="Hypothesis-led positioning vs Databricks" />
-        <div className="mt-4 space-y-3">
-          <div className="rounded-xl border border-accent/25 bg-accent/[0.06] p-3">
-            <p className="text-[11px] font-medium uppercase text-accent/90">POV hypothesis</p>
-            <p className="mt-1 text-[12px] text-text-secondary">{selectedAccount.povHypothesis}</p>
-          </div>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <div className="rounded-lg border border-surface-border/50 bg-surface-muted/30 p-3">
-              <p className="text-[10px] uppercase text-text-faint">Snowflake</p>
-              <p className="mt-1 text-[12px] text-text-secondary">
-                Governed enterprise execution; faster path to measurable outcomes.
-              </p>
+      {onOpenStrategyWithPrompt ? (
+        <PovPlanModule
+          priorityAccount={selectedAccount}
+          onGeneratePovPlan={onOpenStrategyWithPrompt}
+        />
+      ) : (
+        <section id="pov-plan" className="scroll-mt-24 rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
+          <SectionHeader title="POV Plan" subtitle="Hypothesis-led positioning vs Databricks" />
+          <div className="mt-4 space-y-3">
+            <div className="rounded-xl border border-accent/25 bg-accent/[0.06] p-3">
+              <p className="text-[11px] font-medium uppercase text-accent/90">POV hypothesis</p>
+              <p className="mt-1 text-[12px] text-text-secondary">{selectedAccount.povHypothesis}</p>
             </div>
-            <div className="rounded-lg border border-rose-400/20 bg-rose-400/[0.05] p-3">
-              <p className="text-[10px] uppercase text-rose-300/90">Databricks</p>
-              <p className="mt-1 text-[12px] text-text-secondary">
-                Technical incumbency remains where business proof is weak.
-              </p>
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+              <div className="rounded-lg border border-surface-border/50 bg-surface-muted/30 p-3">
+                <p className="text-[10px] uppercase text-text-faint">Snowflake</p>
+                <p className="mt-1 text-[12px] text-text-secondary">
+                  Governed enterprise execution; faster path to measurable outcomes.
+                </p>
+              </div>
+              <div className="rounded-lg border border-rose-400/20 bg-rose-400/[0.05] p-3">
+                <p className="text-[10px] uppercase text-rose-300/90">Databricks</p>
+                <p className="mt-1 text-[12px] text-text-secondary">
+                  Technical incumbency remains where business proof is weak.
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       <section id="expansion-path" className="scroll-mt-24 rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
         <SectionHeader title="Expansion Path" subtitle="Land → prove → expand sequence" />
@@ -287,7 +308,7 @@ export function Overview({
         </p>
       </section>
 
-      <section id="weekly-briefing" className="scroll-mt-24 rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
+      <section id="this-weeks-priorities" className="scroll-mt-24 rounded-2xl border border-surface-border/50 bg-surface-elevated/30 p-4 sm:p-6">
         <SectionHeader title="Weekly Briefing" subtitle="This week's operating priorities" />
         <ul className="mt-4 space-y-2">
           {next7Days.map((item) => (
@@ -305,7 +326,7 @@ export function Overview({
         </ul>
       </section>
 
-      <section id="signals-activity" className="scroll-mt-24 space-y-4">
+      <section id="recent-signals" className="scroll-mt-24 space-y-4">
         <SectionHeader
           title="Signals & Activity"
           subtitle="Curated news, outreach log—connect to CRM post-onboarding"
